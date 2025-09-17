@@ -29,7 +29,7 @@ This MCP server provides **Ghidra + GPT-5** integration for advanced reverse eng
 ### **1. Prerequisites**
 ```bash
 # Ensure you have:
-- Warp Terminal (latest version)
+- Terminal Terminal (latest version)
 - OpenAI API key with GPT-4o/GPT-5 access
 - Python 3.8+ with pip
 - Ghidra 11.x (optional but recommended)
@@ -44,7 +44,7 @@ cd ~/mcp-servers/ghidra-gpt5
 # Copy the server files (provided separately)
 # - ghidra_gpt5_mcp.py
 # - run_ghidra_gpt5.sh
-# - ghidra_gpt5_warp_config.json
+# - ghidra_gpt5_terminal_config.json
 ```
 
 ### **3. Install Dependencies**
@@ -78,11 +78,11 @@ chmod +x run_ghidra_gpt5.sh
 ./run_ghidra_gpt5.sh --test
 ```
 
-### **6. Add to Warp Terminal**
-1. Open Warp Terminal Settings
+### **6. Add to Terminal Terminal**
+1. Open Terminal Terminal Settings
 2. Navigate to **Features** → **Agent Mode** → **MCP Servers**
 3. Click **"Add MCP Server"**
-4. Use the configuration from `ghidra_gpt5_warp_config.json`:
+4. Use the configuration from `ghidra_gpt5_terminal_config.json`:
 
 ```json
 {
@@ -100,7 +100,7 @@ chmod +x run_ghidra_gpt5.sh
 ```
 
 5. Replace paths with your actual installation paths
-6. Click **"Save"** and restart Warp Terminal
+6. Click **"Save"** and restart Terminal Terminal
 
 ---
 
@@ -326,7 +326,7 @@ python3 -u ghidra_gpt5_mcp.py
 ### **Log Files**
 - Server logs: `/tmp/ghidra_gpt5_mcp.log`
 - Ghidra logs: `/tmp/ghidra_projects/*/logs/`
-- MCP logs: Check Warp Terminal → Settings → Logs
+- MCP logs: Check Terminal Terminal → Settings → Logs
 
 ---
 
@@ -337,7 +337,7 @@ python3 -u ghidra_gpt5_mcp.py
 # Get latest version
 git pull origin main
 
-# Restart Warp Terminal to reload MCP server
+# Restart Terminal Terminal to reload MCP server
 # Settings → Features → Agent Mode → Restart MCP Servers
 ```
 
@@ -346,7 +346,7 @@ git pull origin main
 # Update environment variable
 export OPENAI_API_KEY="new-key"
 
-# Update Warp configuration
+# Update Terminal configuration
 # Settings → Features → Agent Mode → Edit MCP Server
 ```
 
@@ -363,7 +363,7 @@ export GHIDRA_HEADLESS_PATH="/opt/ghidra-11.1/support/analyzeHeadless"
 
 ### **Getting Help**
 1. Check the troubleshooting section above
-2. Review Warp Terminal MCP logs  
+2. Review Terminal Terminal MCP logs  
 3. Test individual components (API key, Ghidra, Python packages)
 4. Contact the deployment team with specific error messages
 
@@ -401,4 +401,4 @@ export GHIDRA_HEADLESS_PATH="/opt/ghidra-11.1/support/analyzeHeadless"
 
 *Last Updated: September 15, 2024*  
 *Version: 1.0*  
-*Compatible with: Warp Terminal Agent Mode, GPT-4o/GPT-5, Ghidra 11.x*
+*Compatible with: Terminal Terminal Agent Mode, GPT-4o/GPT-5, Ghidra 11.x*

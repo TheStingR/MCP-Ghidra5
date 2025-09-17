@@ -1,5 +1,5 @@
 #!/bin/bash
-# TechSquad Inc. - Warp Terminal Configuration Generator
+# TechSquad Inc. - Terminal Terminal Configuration Generator
 #
 # Copyright (c) 2024 TechSquad Inc. - All Rights Reserved
 # Proprietary Software - NOT FOR RESALE
@@ -21,7 +21,7 @@ NC='\033[0m' # No Color
 # Get script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo -e "${BOLD}${BLUE}🔧 TechSquad Inc. - Warp Configuration Generator${NC}"
+echo -e "${BOLD}${BLUE}🔧 TechSquad Inc. - Terminal Configuration Generator${NC}"
 echo "================================================="
 echo -e "${YELLOW}Copyright (c) 2024 TechSquad Inc. - All Rights Reserved${NC}"
 echo ""
@@ -49,9 +49,9 @@ if command -v pipx >/dev/null 2>&1; then
 fi
 
 # Generate configuration
-CONFIG_FILE="$SCRIPT_DIR/ghidra_gpt5_warp_config.json"
+CONFIG_FILE="$SCRIPT_DIR/ghidra_gpt5_terminal_config.json"
 
-echo -e "${BLUE}📝 Generating Warp Terminal configuration...${NC}"
+echo -e "${BLUE}📝 Generating Terminal Terminal configuration...${NC}"
 
 cat > "$CONFIG_FILE" << EOF
 {
@@ -74,12 +74,12 @@ EOF
 echo -e "${GREEN}✅ Configuration generated: $CONFIG_FILE${NC}"
 echo ""
 echo -e "${BOLD}🚀 How to use this configuration:${NC}"
-echo -e "${YELLOW}1. Open Warp Terminal Settings${NC}"
+echo -e "${YELLOW}1. Open Terminal Terminal Settings${NC}"
 echo -e "${YELLOW}2. Go to Features → Agent Mode → MCP Servers${NC}"
 echo -e "${YELLOW}3. Click 'Add MCP Server'${NC}"
 echo -e "${YELLOW}4. Copy the contents from: $CONFIG_FILE${NC}"
 echo -e "${YELLOW}5. Paste into the configuration field${NC}"
-echo -e "${YELLOW}6. Save and restart Warp Terminal${NC}"
+echo -e "${YELLOW}6. Save and restart Terminal Terminal${NC}"
 echo ""
 echo -e "${BOLD}📋 Configuration Details:${NC}"
 echo -e "${GREEN}  Server Name: techsquad-ghidra-gpt5${NC}"

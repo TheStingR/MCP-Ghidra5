@@ -157,8 +157,8 @@ chmod +x "$INSTALL_DIR/ghidra_gpt5_mcp.py"
 
 echo -e "${GREEN}✅ Files installed and permissions set${NC}"
 
-# Create Warp Terminal configuration
-echo -e "${BLUE}🔧 Creating Warp Terminal configuration...${NC}"
+# Create Terminal Terminal configuration
+echo -e "${BLUE}🔧 Creating Terminal Terminal configuration...${NC}"
 
 # Detect Python path
 PYTHON_PATH=$(which python3)
@@ -169,8 +169,8 @@ if command -v pipx >/dev/null 2>&1; then
     fi
 fi
 
-# Create Warp config
-cat > "$INSTALL_DIR/ghidra_gpt5_warp_config.json" << EOF
+# Create Terminal config
+cat > "$INSTALL_DIR/ghidra_gpt5_terminal_config.json" << EOF
 {
   "mcpServers": {
     "techsquad-ghidra-gpt5": {
@@ -188,7 +188,7 @@ cat > "$INSTALL_DIR/ghidra_gpt5_warp_config.json" << EOF
 }
 EOF
 
-echo -e "${GREEN}✅ Warp configuration created with your API key${NC}"
+echo -e "${GREEN}✅ Terminal configuration created with your API key${NC}"
 
 # Install Python dependencies
 echo -e "${BLUE}📦 Installing Python dependencies...${NC}"
@@ -252,7 +252,7 @@ echo -e "${BOLD}${GREEN}🎉 TechSquad Inc. Ghidra GPT-5 MCP Server installed su
 echo ""
 echo -e "${BOLD}📍 Installation Details:${NC}"
 echo -e "${YELLOW}  Installation Directory: $INSTALL_DIR${NC}"
-echo -e "${YELLOW}  Configuration File: $INSTALL_DIR/ghidra_gpt5_warp_config.json${NC}"
+echo -e "${YELLOW}  Configuration File: $INSTALL_DIR/ghidra_gpt5_terminal_config.json${NC}"
 echo -e "${YELLOW}  API Key: Configured and saved${NC}"
 echo -e "${YELLOW}  Documentation: $INSTALL_DIR/GHIDRA_GPT5_DEPLOYMENT_GUIDE.md${NC}"
 echo -e "${YELLOW}  Copyright Info: $INSTALL_DIR/COPYRIGHT.txt${NC}"
@@ -261,12 +261,12 @@ echo -e "${BOLD}🚀 Next Steps:${NC}"
 echo -e "${GREEN}1. Restart your terminal to load environment variables${NC}"
 echo -e "${GREEN}2. Test the installation:${NC}"
 echo -e "${BLUE}   cd $INSTALL_DIR && ./test_ghidra_gpt5.py${NC}"
-echo -e "${GREEN}3. Add to Warp Terminal:${NC}"
-echo -e "${BLUE}   - Open Warp Terminal Settings${NC}"
+echo -e "${GREEN}3. Add to Terminal Terminal:${NC}"
+echo -e "${BLUE}   - Open Terminal Terminal Settings${NC}"
 echo -e "${BLUE}   - Go to Features → Agent Mode → MCP Servers${NC}"
 echo -e "${BLUE}   - Click 'Add MCP Server'${NC}"
-echo -e "${BLUE}   - Use the configuration from: $INSTALL_DIR/ghidra_gpt5_warp_config.json${NC}"
-echo -e "${GREEN}4. Restart Warp Terminal${NC}"
+echo -e "${BLUE}   - Use the configuration from: $INSTALL_DIR/ghidra_gpt5_terminal_config.json${NC}"
+echo -e "${GREEN}4. Restart Terminal Terminal${NC}"
 echo ""
 echo -e "${BOLD}🔧 Usage Examples:${NC}"
 echo -e "${YELLOW}call_mcp_tool(\"ghidra_binary_analysis\", {\"binary_path\": \"/path/to/binary\"})${NC}"

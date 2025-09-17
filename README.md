@@ -31,7 +31,7 @@
 - **🎯 Pattern Recognition** - Vulnerability detection across multiple architectures
 
 ### **🏗️ Professional Integration**
-- **🔗 Warp Terminal Integration** - Seamless MCP server deployment
+- **🔗 Terminal Terminal Integration** - Seamless MCP server deployment
 - **📋 Multi-Architecture Support** - x86, x64, ARM, MIPS, RISC-V compatibility
 - **⚙️ Automated Installation** - One-command setup with dependency management
 - **🔑 API Key Management** - Secure OpenAI API key configuration
@@ -66,7 +66,7 @@ unzip main.zip && cd MCP-Ghidra5-main
 # 4. Test installation
 ./test_ghidra_gpt5.py
 
-# 5. Add to Warp Terminal (use generated config)
+# 5. Add to Terminal Terminal (use generated config)
 # Settings → Agent Mode → MCP Servers → Add Server
 ```
 
@@ -219,7 +219,7 @@ This is **TechSquad Inc. proprietary software**. For feature requests, bug repor
 - ✅ 7 advanced analysis tools
 - ✅ GPT-5 integration
 - ✅ Comprehensive installer
-- ✅ Warp Terminal support
+- ✅ Terminal Terminal support
 - ✅ Multi-architecture compatibility
 
 ---

@@ -14,7 +14,7 @@
 
 ## 📋 **Project Overview**
 
-Successfully created a **production-ready Ghidra GPT-5 MCP Server** specifically designed for your remote pentester who needs GPT-5 integration instead of Claude for reverse engineering and binary analysis tasks.
+Successfully created a **production-ready Ghidra GPT-5 MCP Server** specifically designed for your remote pentesters who needs GPT-5 integration instead of Claude for reverse engineering and binary analysis tasks.
 
 ## 🚀 **What Was Built**
 
@@ -39,7 +39,7 @@ Successfully created a **production-ready Ghidra GPT-5 MCP Server** specifically
 
 - **`run_ghidra_gpt5.sh`** - Startup script with dependency checking
 - **`test_ghidra_gpt5.py`** - Comprehensive testing suite
-- **`ghidra_gpt5_warp_config.json`** - Warp Terminal configuration
+- **`ghidra_gpt5_terminal_config.json`** - Terminal Terminal configuration
 - **`GHIDRA_GPT5_DEPLOYMENT_GUIDE.md`** - Complete deployment documentation
 
 ## 📦 **Deployment Package**
@@ -54,7 +54,7 @@ SHA256: eb68b1c9681824d320ec8f8ea9461609e3253b746ab20974d40f584f58c53e6c
 - All server files + documentation
 - One-command installation script
 - Test suite for validation  
-- Warp Terminal configuration
+- Terminal Terminal configuration
 - Checksums for integrity verification
 
 ## 🎯 **Key Features & Capabilities**
@@ -96,7 +96,7 @@ SHA256: eb68b1c9681824d320ec8f8ea9461609e3253b746ab20974d40f584f58c53e6c
 ### **Requirements:**
 - **Python 3.8+** with `mcp` and `aiohttp`
 - **OpenAI API key** (GPT-4o/GPT-5 access)
-- **Warp Terminal** (latest version)
+- **Terminal Terminal** (latest version)
 - **Ghidra 11.x** (optional but recommended)
 
 ## 🔧 **For Your Remote Pentester**
@@ -106,8 +106,8 @@ SHA256: eb68b1c9681824d320ec8f8ea9461609e3253b746ab20974d40f584f58c53e6c
 2. Run installer: `./install.sh`
 3. Set API key: `export OPENAI_API_KEY="sk-..."`
 4. Test server: `./test_ghidra_gpt5.py`
-5. Add to Warp Terminal MCP configuration
-6. Restart Warp Terminal
+5. Add to Terminal Terminal MCP configuration
+6. Restart Terminal Terminal
 
 ### **Usage Examples:**
 ```bash
@@ -159,7 +159,7 @@ The Ghidra GPT-5 MCP Server is **production-ready** and optimized for:
 - **Vulnerability research** and development
 
 ### **Next Steps:**
-1. **Send package** to your remote pentester
+1. **Send package** to your remote pentesters
 2. **Provide OpenAI API key** for GPT-5 access
 3. **Support installation** if needed
 4. **Collect feedback** for future improvements
@@ -182,8 +182,8 @@ The Ghidra GPT-5 MCP Server is **production-ready** and optimized for:
 
 ## ✅ **Project Status: COMPLETE**
 
-**🎯 Delivered a world-class Ghidra GPT-5 MCP Server that rivals commercial reverse engineering tools while providing the flexibility and advanced reasoning capabilities your remote pentester needs.**
+**🎯 Delivered a world-class Ghidra GPT-5 MCP Server that rivals commercial reverse engineering tools while providing the flexibility and advanced reasoning capabilities your remote pentesters needs.**
 
 **📦 Package ready for deployment: `/tmp/ghidra-gpt5-mcp-server-20250915.tar.gz`**
 
-*Your remote pentester now has access to GPT-5-powered reverse engineering capabilities integrated seamlessly into their Warp Terminal workflow.*
+*Your remote pentesters now has access to GPT-5-powered reverse engineering capabilities integrated seamlessly into their Terminal Terminal workflow.*

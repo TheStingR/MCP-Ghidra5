@@ -41,7 +41,7 @@ Successfully created and secured **TechSquad Inc. Ghidra GPT-5 MCP Server** with
 - **run_ghidra_gpt5.sh** - Startup script with dynamic paths
 - **test_ghidra_gpt5.py** - Testing suite with dynamic paths
 - **verify_setup.sh** - Setup verification and troubleshooting tool
-- **generate_warp_config.sh** - Warp Terminal configuration generator
+- **generate_terminal_config.sh** - Terminal Terminal configuration generator
 - **GHIDRA_GPT5_DEPLOYMENT_GUIDE.md** - Complete documentation with copyright
 - **COPYRIGHT.txt** - Legal protection and licensing terms
 - **TECHSQUAD_CHECKSUMS.txt** - File integrity verification
@@ -58,11 +58,11 @@ Successfully created and secured **TechSquad Inc. Ghidra GPT-5 MCP Server** with
    - 🔑 **API key setup** (prompts for OpenAI key)
    - 📦 **Dependency installation** (mcp, aiohttp via pip/pipx)
    - 📁 **File installation** (copies to ~/mcp-servers/techsquad-ghidra-gpt5)
-   - ⚙️ **Warp config generation** (with correct paths and API key)
+   - ⚙️ **Terminal config generation** (with correct paths and API key)
    - 🌍 **Environment setup** (adds API key to shell config)
    - 🧪 **Installation testing** (verifies everything works)
 3. **Verify Setup**: `./verify_setup.sh` (optional troubleshooting)
-4. **Add to Warp Terminal**: Use generated configuration file
+4. **Add to Terminal Terminal**: Use generated configuration file
 5. **Test Functionality**: `./test_ghidra_gpt5.py`
 
 ### **Legal Compliance:**
@@ -127,7 +127,7 @@ Coded by: TheStingR
 1. Extract and run installer (with terms acceptance)
 2. Set OpenAI API key
 3. Test functionality
-4. Add to Warp Terminal
+4. Add to Terminal Terminal
 5. Access 7 advanced reverse engineering tools
 6. GPT-5 powered binary analysis capabilities
 
@@ -158,7 +158,7 @@ Coded by: TheStingR
 
 ## ✅ **FINAL STATUS: READY FOR DEPLOYMENT**
 
-**🏢 TechSquad Inc. Ghidra GPT-5 MCP Server is complete, legally protected, and ready for authorized distribution to your remote pentester.**
+**🏢 TechSquad Inc. Ghidra GPT-5 MCP Server is complete, legally protected, and ready for authorized distribution to your remote pentesters.**
 
 **📦 Package Location**: Available in GitHub releases
 

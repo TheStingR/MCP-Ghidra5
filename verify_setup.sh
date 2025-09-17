@@ -132,7 +132,7 @@ EXECUTABLE_FILES=(
     "run_ghidra_gpt5.sh"
     "test_ghidra_gpt5.py"
     "install_techsquad.sh"
-    "generate_warp_config.sh"
+    "generate_terminal_config.sh"
     "verify_setup.sh"
 )
 
@@ -171,9 +171,9 @@ if [[ $ISSUES_FOUND -eq 0 ]]; then
     echo ""
     echo -e "${BOLD}🚀 Next steps:${NC}"
     echo -e "${GREEN}1. Run: ./test_ghidra_gpt5.py (to test functionality)${NC}"
-    echo -e "${GREEN}2. Run: ./generate_warp_config.sh (to create Warp config)${NC}"
-    echo -e "${GREEN}3. Add the configuration to Warp Terminal${NC}"
-    echo -e "${GREEN}4. Restart Warp Terminal${NC}"
+    echo -e "${GREEN}2. Run: ./generate_terminal_config.sh (to create Terminal config)${NC}"
+    echo -e "${GREEN}3. Add the configuration to Terminal Terminal${NC}"
+    echo -e "${GREEN}4. Restart Terminal Terminal${NC}"
 else
     echo -e "${BOLD}${RED}⚠️  Found $ISSUES_FOUND issue(s) that need attention.${NC}"
     echo ""

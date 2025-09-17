@@ -24,7 +24,7 @@ echo "📋 Copying TechSquad Inc. proprietary files..."
 cp ghidra_gpt5_mcp.py "$PACKAGE_DIR/"
 cp run_ghidra_gpt5.sh "$PACKAGE_DIR/"
 cp test_ghidra_gpt5.py "$PACKAGE_DIR/"
-cp ghidra_gpt5_warp_config.json "$PACKAGE_DIR/"
+cp ghidra_gpt5_terminal_config.json "$PACKAGE_DIR/"
 cp GHIDRA_GPT5_DEPLOYMENT_GUIDE.md "$PACKAGE_DIR/"
 cp GHIDRA_GPT5_PROJECT_SUMMARY.md "$PACKAGE_DIR/"
 cp COPYRIGHT.txt "$PACKAGE_DIR/"
@@ -71,7 +71,7 @@ echo "📋 Installing TechSquad proprietary files..."
 cp ghidra_gpt5_mcp.py "$INSTALL_DIR/"
 cp run_ghidra_gpt5.sh "$INSTALL_DIR/"
 cp test_ghidra_gpt5.py "$INSTALL_DIR/"
-cp ghidra_gpt5_warp_config.json "$INSTALL_DIR/"
+cp ghidra_gpt5_terminal_config.json "$INSTALL_DIR/"
 cp GHIDRA_GPT5_DEPLOYMENT_GUIDE.md "$INSTALL_DIR/"
 cp COPYRIGHT.txt "$INSTALL_DIR/"
 
@@ -107,7 +107,7 @@ echo ""
 echo "Next steps:"
 echo "1. Set your OpenAI API key (required)"
 echo "2. Test the server: cd $INSTALL_DIR && ./test_ghidra_gpt5.py"
-echo "3. Add to Warp Terminal using ghidra_gpt5_warp_config.json"
+echo "3. Add to Terminal Terminal using ghidra_gpt5_terminal_config.json"
 echo ""
 echo "⚖️  Remember: This is TechSquad Inc. proprietary software."
 echo "   Unauthorized distribution or resale is prohibited."
@@ -124,7 +124,7 @@ cat > "$PACKAGE_DIR/README.md" << 'EOF'
 **Proprietary Software - NOT FOR RESALE**  
 **Coded by: TheStingR**
 
-Advanced reverse engineering with GPT-5 integration for Warp Terminal.
+Advanced reverse engineering with GPT-5 integration for Terminal Terminal.
 
 ## ⚖️ Legal Notice
 
@@ -137,7 +137,7 @@ distribution, or sale is strictly prohibited. See `COPYRIGHT.txt` for full terms
 2. **Install**: `./install_techsquad.sh` 
 3. **Configure API Key**: `export OPENAI_API_KEY="sk-your-key"`
 4. **Test**: `./test_ghidra_gpt5.py`
-5. **Deploy**: Add to Warp Terminal using `ghidra_gpt5_warp_config.json`
+5. **Deploy**: Add to Terminal Terminal using `ghidra_gpt5_terminal_config.json`
 
 ## Features
 

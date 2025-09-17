@@ -24,7 +24,7 @@ echo "📋 Copying core files..."
 cp ghidra_gpt5_mcp.py "$PACKAGE_DIR/"
 cp run_ghidra_gpt5.sh "$PACKAGE_DIR/"
 cp test_ghidra_gpt5.py "$PACKAGE_DIR/"
-cp ghidra_gpt5_warp_config.json "$PACKAGE_DIR/"
+cp ghidra_gpt5_terminal_config.json "$PACKAGE_DIR/"
 cp GHIDRA_GPT5_DEPLOYMENT_GUIDE.md "$PACKAGE_DIR/"
 
 # Create installation script
@@ -52,7 +52,7 @@ echo "📋 Copying server files..."
 cp ghidra_gpt5_mcp.py "$INSTALL_DIR/"
 cp run_ghidra_gpt5.sh "$INSTALL_DIR/"
 cp test_ghidra_gpt5.py "$INSTALL_DIR/"
-cp ghidra_gpt5_warp_config.json "$INSTALL_DIR/"
+cp ghidra_gpt5_terminal_config.json "$INSTALL_DIR/"
 cp GHIDRA_GPT5_DEPLOYMENT_GUIDE.md "$INSTALL_DIR/"
 
 # Make scripts executable
@@ -86,7 +86,7 @@ echo ""
 echo "Next steps:"
 echo "1. Set your OpenAI API key: export OPENAI_API_KEY=\"sk-...\""
 echo "2. Test the server: cd $INSTALL_DIR && ./test_ghidra_gpt5.py"
-echo "3. Add to Warp Terminal using ghidra_gpt5_warp_config.json"
+echo "3. Add to Terminal Terminal using ghidra_gpt5_terminal_config.json"
 EOF
 
 chmod +x "$PACKAGE_DIR/install.sh"
@@ -100,14 +100,14 @@ cat > "$PACKAGE_DIR/README.md" << 'EOF'
 **Proprietary Software - NOT FOR RESALE**  
 **Coded by: TheStingR**  
 
-Advanced reverse engineering with GPT-5 integration for Warp Terminal.
+Advanced reverse engineering with GPT-5 integration for Terminal Terminal.
 
 ## Quick Start
 
 1. **Install**: `./install.sh`
 2. **Configure API Key**: `export OPENAI_API_KEY="sk-your-key"`
 3. **Test**: `./test_ghidra_gpt5.py`
-4. **Deploy**: Add to Warp Terminal using `ghidra_gpt5_warp_config.json`
+4. **Deploy**: Add to Terminal Terminal using `ghidra_gpt5_terminal_config.json`
 
 ## Features
 
@@ -149,5 +149,5 @@ echo ""
 echo "📋 Package contents:"
 ls -la "$PACKAGE_DIR/"
 echo ""
-echo "🚀 Ready to send to remote pentester!"
+echo "🚀 Ready to send to remote pentesters!"
 echo "💡 They can extract and run: ./install.sh"
