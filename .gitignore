@@ -1,0 +1,61 @@
+# TechSquad Inc. - MCP-Ghidra5 Project
+# Copyright (c) 2024 TechSquad Inc. - All Rights Reserved
+
+# Sensitive configuration files
+*api_key*
+*.key
+.env
+*.secrets
+
+# Log files
+*.log
+logs/
+ghidra_gpt5_mcp.log
+
+# Ghidra projects and temp files
+ghidra_projects/
+/tmp/
+*.tmp
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Distribution packages
+*.tar.gz
+*.zip
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Test outputs
+test_results/
+coverage_reports/
+
+# TechSquad Inc. Internal Files
+internal/
+proprietary/
+classified/

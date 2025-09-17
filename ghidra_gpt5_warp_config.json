@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "ghidra-gpt5": {
+      "command": "/home/kali-admin/.local/share/pipx/venvs/mcp/bin/python",
+      "args": ["/mnt/storage/MCP-Ghidra5/ghidra_gpt5_mcp.py"],
+      "env": {
+        "OPENAI_API_KEY": "REPLACE_WITH_YOUR_OPENAI_API_KEY",
+        "GHIDRA_HEADLESS_PATH": "/opt/ghidra/support/analyzeHeadless",
+        "GHIDRA_PROJECT_DIR": "/mnt/storage/MCP-Ghidra5/ghidra_projects",
+        "PYTHONPATH": "/mnt/storage/MCP-Ghidra5"
+      },
+      "working_directory": "/mnt/storage/MCP-Ghidra5"
+    }
+  }
+}

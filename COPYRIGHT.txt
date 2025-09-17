@@ -1,0 +1,41 @@
+===============================================================================
+GHIDRA GPT-5 MCP SERVER - COPYRIGHT AND LICENSING INFORMATION
+===============================================================================
+
+Copyright (c) 2024 TechSquad Inc. - All Rights Reserved
+Proprietary Software - NOT FOR RESALE
+Coded by: TheStingR
+
+This software, including all source code, documentation, and associated files, 
+is the exclusive property of TechSquad Inc. and is protected by United States 
+and international copyright law.
+
+RESTRICTIONS:
+- This software is proprietary and confidential
+- Unauthorized reproduction, distribution, or sale is strictly prohibited
+- Reverse engineering, decompilation, or disassembly is prohibited
+- No part of this software may be copied, modified, or distributed
+- Use is restricted to authorized TechSquad Inc. personnel and licensees only
+
+LICENSING:
+This software is not for resale or redistribution. Any use outside of 
+TechSquad Inc. requires explicit written permission from TechSquad Inc.
+
+For licensing inquiries or permissions, contact:
+TechSquad Inc.
+Email: legal@techsquad.inc
+Subject: Ghidra GPT-5 MCP Server Licensing Inquiry
+
+VIOLATION NOTICE:
+Any unauthorized use, reproduction, or distribution of this software 
+constitutes copyright infringement and may result in severe civil and 
+criminal penalties.
+
+DEVELOPER ATTRIBUTION:
+Primary Developer: TheStingR
+Development Date: September 15, 2024
+Project Code: MCP-Ghidra5-GPT5-RE-2024
+
+===============================================================================
+TechSquad Inc. - Advanced Cybersecurity Solutions
+===============================================================================
