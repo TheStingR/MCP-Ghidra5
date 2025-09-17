@@ -60,7 +60,7 @@ wget https://github.com/TheStingR/MCP-Ghidra5/archive/main.zip
 unzip main.zip && cd MCP-Ghidra5-main
 
 # 3. Run comprehensive installer
-./install_techsquad.sh
+./install_mcp_ghidra5.sh
 # Follow prompts: Accept terms → Enter API key → Done!
 
 # 4. Test installation

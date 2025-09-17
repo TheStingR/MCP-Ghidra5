@@ -23,7 +23,7 @@ INSTALL_DIR="$HOME/mcp-servers/techsquad-ghidra-gpt5"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PYTHON_CMD="python3"
 
-echo -e "${BOLD}${BLUE}🏢 TechSquad Inc. - Ghidra GPT-5 MCP Server Installer${NC}"
+echo -e "${BOLD}${BLUE}🎯 MCP-Ghidra5 - Advanced GPT-5 Reverse Engineering Installer${NC}"
 echo "=============================================================="
 echo -e "${YELLOW}Copyright (c) 2024 TechSquad Inc. - All Rights Reserved${NC}"
 echo -e "${YELLOW}Coded by: TheStingR${NC}"
@@ -45,7 +45,7 @@ if [[ "$AGREE" != "yes" ]]; then
 fi
 
 echo ""
-echo -e "${GREEN}✅ Terms accepted. Proceeding with TechSquad installation...${NC}"
+echo -e "${GREEN}✅ Terms accepted. Proceeding with installation...${NC}"
 echo ""
 
 # System compatibility check
@@ -157,8 +157,8 @@ chmod +x "$INSTALL_DIR/ghidra_gpt5_mcp.py"
 
 echo -e "${GREEN}✅ Files installed and permissions set${NC}"
 
-# Create Terminal Terminal configuration
-echo -e "${BLUE}🔧 Creating Terminal Terminal configuration...${NC}"
+# Create Terminal configuration
+echo -e "${BLUE}🔧 Creating Terminal configuration...${NC}"
 
 # Detect Python path
 PYTHON_PATH=$(which python3)
@@ -261,12 +261,12 @@ echo -e "${BOLD}🚀 Next Steps:${NC}"
 echo -e "${GREEN}1. Restart your terminal to load environment variables${NC}"
 echo -e "${GREEN}2. Test the installation:${NC}"
 echo -e "${BLUE}   cd $INSTALL_DIR && ./test_ghidra_gpt5.py${NC}"
-echo -e "${GREEN}3. Add to Terminal Terminal:${NC}"
-echo -e "${BLUE}   - Open Terminal Terminal Settings${NC}"
+echo -e "${GREEN}3. Add to Terminal:${NC}"
+echo -e "${BLUE}   - Open Terminal Settings${NC}"
 echo -e "${BLUE}   - Go to Features → Agent Mode → MCP Servers${NC}"
 echo -e "${BLUE}   - Click 'Add MCP Server'${NC}"
 echo -e "${BLUE}   - Use the configuration from: $INSTALL_DIR/ghidra_gpt5_terminal_config.json${NC}"
-echo -e "${GREEN}4. Restart Terminal Terminal${NC}"
+echo -e "${GREEN}4. Restart Terminal${NC}"
 echo ""
 echo -e "${BOLD}🔧 Usage Examples:${NC}"
 echo -e "${YELLOW}call_mcp_tool(\"ghidra_binary_analysis\", {\"binary_path\": \"/path/to/binary\"})${NC}"

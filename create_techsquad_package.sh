@@ -31,7 +31,7 @@ cp COPYRIGHT.txt "$PACKAGE_DIR/"
 
 # Create TechSquad installation script
 echo "🔧 Creating TechSquad installation script..."
-cat > "$PACKAGE_DIR/install_techsquad.sh" << 'EOF'
+cat > "$PACKAGE_DIR/install_mcp_ghidra5.sh" << 'EOF'
 #!/bin/bash
 # TechSquad Inc. - Ghidra GPT-5 MCP Server Installation Script
 #
@@ -113,7 +113,7 @@ echo "⚖️  Remember: This is TechSquad Inc. proprietary software."
 echo "   Unauthorized distribution or resale is prohibited."
 EOF
 
-chmod +x "$PACKAGE_DIR/install_techsquad.sh"
+chmod +x "$PACKAGE_DIR/install_mcp_ghidra5.sh"
 
 # Create TechSquad README
 echo "📄 Creating TechSquad README..."
@@ -134,7 +134,7 @@ distribution, or sale is strictly prohibited. See `COPYRIGHT.txt` for full terms
 ## Quick Start
 
 1. **Read Copyright**: Review `COPYRIGHT.txt` before use
-2. **Install**: `./install_techsquad.sh` 
+2. **Install**: `./install_mcp_ghidra5.sh` 
 3. **Configure API Key**: `export OPENAI_API_KEY="sk-your-key"`
 4. **Test**: `./test_ghidra_gpt5.py`
 5. **Deploy**: Add to Terminal Terminal using `ghidra_gpt5_terminal_config.json`

@@ -32,7 +32,7 @@ REQUIRED_FILES=(
     "ghidra_gpt5_mcp.py"
     "run_ghidra_gpt5.sh" 
     "test_ghidra_gpt5.py"
-    "install_techsquad.sh"
+    "install_mcp_ghidra5.sh"
     "COPYRIGHT.txt"
 )
 
@@ -131,7 +131,7 @@ EXECUTABLE_FILES=(
     "ghidra_gpt5_mcp.py"
     "run_ghidra_gpt5.sh"
     "test_ghidra_gpt5.py"
-    "install_techsquad.sh"
+    "install_mcp_ghidra5.sh"
     "generate_terminal_config.sh"
     "verify_setup.sh"
 )

@@ -37,7 +37,7 @@ Successfully created and secured **TechSquad Inc. Ghidra GPT-5 MCP Server** with
 
 ### **Package Contents:**
 - **ghidra_gpt5_mcp.py** - Main MCP server (32,117 lines) with TechSquad copyright
-- **install_techsquad.sh** - 🆕 COMPREHENSIVE INSTALLER with API key setup
+- **install_mcp_ghidra5.sh** - 🆕 COMPREHENSIVE INSTALLER with API key setup
 - **run_ghidra_gpt5.sh** - Startup script with dynamic paths
 - **test_ghidra_gpt5.py** - Testing suite with dynamic paths
 - **verify_setup.sh** - Setup verification and troubleshooting tool
@@ -52,7 +52,7 @@ Successfully created and secured **TechSquad Inc. Ghidra GPT-5 MCP Server** with
 
 ### **Installation Process:**
 1. **Extract Package**: `tar -xzf techsquad-ghidra-gpt5-mcp-server-*.tar.gz`
-2. **Run Comprehensive Installer**: `./install_techsquad.sh`
+2. **Run Comprehensive Installer**: `./install_mcp_ghidra5.sh`
    - 📝 **Terms acceptance** (TechSquad legal compliance)
    - 🔍 **System compatibility check** (Python, pip, dependencies)
    - 🔑 **API key setup** (prompts for OpenAI key)
@@ -120,7 +120,7 @@ Coded by: TheStingR
 ### **What to Provide Your Remote Pentester:**
 1. **Package File**: Download from GitHub releases
 2. **OpenAI API Key**: For GPT-4o/GPT-5 access
-3. **Installation Instructions**: Run `./install_techsquad.sh`
+3. **Installation Instructions**: Run `./install_mcp_ghidra5.sh`
 4. **Legal Notice**: This is TechSquad Inc. proprietary software
 
 ### **Expected User Experience:**
