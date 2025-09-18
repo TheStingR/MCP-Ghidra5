@@ -59,3 +59,15 @@ coverage_reports/
 internal/
 proprietary/
 classified/
+
+# Private documentation and notes (DO NOT COMMIT)
+*_SUMMARY.md
+*_ANALYSIS.md
+*_REPORT.md
+*_NOTES.md
+COMMIT_MESSAGE.txt
+RELEASE_*.md
+WORK_*.md
+TECHSQUAD_*.md
+EXTERNAL_*.md
+CURRENT_*.md

@@ -31,7 +31,7 @@
 - **🎯 Pattern Recognition** - Vulnerability detection across multiple architectures
 
 ### **🏗️ Professional Integration**
-- **🔗 Terminal Terminal Integration** - Seamless MCP server deployment
+- **🔗 MCP Client Integration** - Seamless MCP server deployment
 - **📋 Multi-Architecture Support** - x86, x64, ARM, MIPS, RISC-V compatibility
 - **⚙️ Automated Installation** - One-command setup with dependency management
 - **🔑 API Key Management** - Secure OpenAI API key configuration
@@ -66,8 +66,8 @@ unzip main.zip && cd MCP-Ghidra5-main
 # 4. Test installation
 ./test_ghidra_gpt5.py
 
-# 5. Add to Terminal Terminal (use generated config)
-# Settings → Agent Mode → MCP Servers → Add Server
+# 5. Add to MCP Client (use generated config)
+# Configure your MCP-compatible client with the generated settings
 ```
 
 ### **Manual Setup**
@@ -201,6 +201,22 @@ call_mcp_tool("gpt5_reverse_engineering_query", {
 
 ---
 
+## 🙏 **Acknowledgments**
+
+### **Issue Reporting & Testing**
+- **[PurpleTeam-TechSquad](https://github.com/PurpleTeam-TechSquad)** - Critical bug discovery and comprehensive testing
+  - Identified Python version detection failure on Python 3.13+ systems
+  - Discovered Ghidra path hardcoding issues on Debian/Ubuntu/Kali systems
+  - Reported API key validation limitations for project-based keys
+  - Provided detailed testing environment and reproduction steps
+  - Testing Environment: Kali GNU/Linux Rolling 2025.3
+  - Test Duration: 45 minutes comprehensive installation and functionality testing
+
+### **Special Thanks**
+We sincerely thank PurpleTeam-TechSquad for their thorough external testing that identified critical compatibility issues, enabling us to make MCP-Ghidra5 truly production-ready across multiple Linux distributions.
+
+---
+
 ## 🤝 **Contributing**
 
 This is **TechSquad Inc. proprietary software**. For feature requests, bug reports, or collaboration inquiries:
@@ -213,6 +229,15 @@ This is **TechSquad Inc. proprietary software**. For feature requests, bug repor
 ---
 
 ## 🏷️ **Version History**
+
+### **v1.0.1** (September 2024)
+- 🔧 **Critical Bug Fixes** (Thanks to PurpleTeam-TechSquad!)
+- ✅ Fixed Python version detection for Python 3.13+ systems
+- ✅ Added Ghidra path auto-detection for Debian/Ubuntu/Kali
+- ✅ Enhanced API key validation for project-based keys
+- ✅ Improved Python package management for externally-managed environments
+- ✅ Added comprehensive AI provider compatibility testing
+- ✅ Enhanced cross-platform Linux distribution support
 
 ### **v1.0.0** (September 2024)
 - ✅ Initial public release

@@ -1,5 +1,7 @@
 #!/bin/bash
 # TechSquad Inc. - Ghidra GPT-5 MCP Server Comprehensive Installer
+# Version: 1.0.1
+# Last Updated: 2025-09-18
 #
 # Copyright (c) 2024 TechSquad Inc. - All Rights Reserved
 # Proprietary Software - NOT FOR RESALE
@@ -7,6 +9,14 @@
 #
 # This software is the property of TechSquad Inc. and is protected by copyright law.
 # Unauthorized reproduction, distribution, or sale is strictly prohibited.
+#
+# CHANGELOG:
+# v1.0.1 (2025-09-18) - Critical bug fixes reported by PurpleTeam-TechSquad
+#   - Fixed Python version detection for Python 3.13+ systems
+#   - Added Ghidra path auto-detection for Debian/Ubuntu/Kali
+#   - Enhanced API key validation for project-based keys
+#   - Improved Python package management for externally-managed environments
+# v1.0.0 (2025-09-15) - Initial release
 
 set -e
 
@@ -23,10 +33,11 @@ INSTALL_DIR="$HOME/mcp-servers/techsquad-ghidra-gpt5"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PYTHON_CMD="python3"
 
-echo -e "${BOLD}${BLUE}🎯 MCP-Ghidra5 - Advanced GPT-5 Reverse Engineering Installer${NC}"
-echo "=============================================================="
+echo -e "${BOLD}${BLUE}🎯 MCP-Ghidra5 - Advanced GPT-5 Reverse Engineering Installer v1.0.1${NC}"
+echo "======================================================================"
 echo -e "${YELLOW}Copyright (c) 2024 TechSquad Inc. - All Rights Reserved${NC}"
 echo -e "${YELLOW}Coded by: TheStingR${NC}"
+echo -e "${YELLOW}Bug fixes thanks to: PurpleTeam-TechSquad${NC}"
 echo ""
 
 # Check if user agrees to TechSquad terms
@@ -51,16 +62,23 @@ echo ""
 # System compatibility check
 echo -e "${BLUE}🔍 Checking system compatibility...${NC}"
 
-# Check Python version
+# Check Python version - FIXED: Use integer comparison instead of bc
 PYTHON_VERSION=$(python3 --version 2>/dev/null | cut -d' ' -f2 | cut -d'.' -f1,2)
 if [[ -z "$PYTHON_VERSION" ]]; then
     echo -e "${RED}❌ Python 3 not found. Please install Python 3.8 or later.${NC}"
     exit 1
-elif [[ $(echo "$PYTHON_VERSION >= 3.8" | bc -l 2>/dev/null || echo "0") -eq 1 ]]; then
-    echo -e "${GREEN}✅ Python $PYTHON_VERSION found${NC}"
 else
-    echo -e "${RED}❌ Python $PYTHON_VERSION found, but 3.8+ required${NC}"
-    exit 1
+    # Extract major and minor version numbers for integer comparison
+    MAJOR_VERSION=$(echo $PYTHON_VERSION | cut -d'.' -f1)
+    MINOR_VERSION=$(echo $PYTHON_VERSION | cut -d'.' -f2)
+    
+    # Check if version is 3.8 or higher using integer comparison
+    if [[ $MAJOR_VERSION -gt 3 ]] || [[ $MAJOR_VERSION -eq 3 && $MINOR_VERSION -ge 8 ]]; then
+        echo -e "${GREEN}✅ Python $PYTHON_VERSION found${NC}"
+    else
+        echo -e "${RED}❌ Python $PYTHON_VERSION found, but 3.8+ required${NC}"
+        exit 1
+    fi
 fi
 
 # Check for pip
@@ -111,9 +129,12 @@ else
     echo ""
 fi
 
-# Validate API key format
-if [[ ! "$API_KEY" =~ ^sk-[A-Za-z0-9]{48,}$ ]]; then
-    echo -e "${YELLOW}⚠️  Warning: API key format doesn't match expected OpenAI format${NC}"
+# Validate API key format - FIXED: Support both legacy and project-based keys
+if [[ "$API_KEY" =~ ^sk-[a-zA-Z0-9]{48,}$ ]] || [[ "$API_KEY" =~ ^sk-proj-[a-zA-Z0-9_-]{80,}$ ]]; then
+    echo -e "${GREEN}✅ API key format appears valid${NC}"
+else
+    echo -e "${YELLOW}⚠️  Warning: API key format doesn't match expected OpenAI patterns${NC}"
+    echo -e "${YELLOW}    Expected: sk-... (legacy) or sk-proj-... (project-based)${NC}"
     read -p "Continue anyway? (y/n): " CONTINUE
     if [[ ! "$CONTINUE" =~ ^[Yy]$ ]]; then
         echo -e "${RED}❌ Installation cancelled${NC}"
@@ -157,8 +178,8 @@ chmod +x "$INSTALL_DIR/ghidra_gpt5_mcp.py"
 
 echo -e "${GREEN}✅ Files installed and permissions set${NC}"
 
-# Create Terminal configuration
-echo -e "${BLUE}🔧 Creating Terminal configuration...${NC}"
+# Create MCP client configuration
+echo -e "${BLUE}🔧 Creating MCP client configuration...${NC}"
 
 # Detect Python path
 PYTHON_PATH=$(which python3)
@@ -169,8 +190,8 @@ if command -v pipx >/dev/null 2>&1; then
     fi
 fi
 
-# Create Terminal config
-cat > "$INSTALL_DIR/ghidra_gpt5_terminal_config.json" << EOF
+# Create MCP client config
+cat > "$INSTALL_DIR/ghidra_gpt5_mcp_config.json" << EOF
 {
   "mcpServers": {
     "techsquad-ghidra-gpt5": {
@@ -178,7 +199,7 @@ cat > "$INSTALL_DIR/ghidra_gpt5_terminal_config.json" << EOF
       "args": ["$INSTALL_DIR/ghidra_gpt5_mcp.py"],
       "env": {
         "OPENAI_API_KEY": "$API_KEY",
-        "GHIDRA_HEADLESS_PATH": "/opt/ghidra/support/analyzeHeadless",
+        "GHIDRA_HEADLESS_PATH": "/usr/share/ghidra/support/analyzeHeadless",
         "GHIDRA_PROJECT_DIR": "$INSTALL_DIR/ghidra_projects",
         "PYTHONPATH": "$INSTALL_DIR"
       },
@@ -188,7 +209,7 @@ cat > "$INSTALL_DIR/ghidra_gpt5_terminal_config.json" << EOF
 }
 EOF
 
-echo -e "${GREEN}✅ Terminal configuration created with your API key${NC}"
+echo -e "${GREEN}✅ MCP client configuration created with your API key${NC}"
 
 # Install Python dependencies
 echo -e "${BLUE}📦 Installing Python dependencies...${NC}"
@@ -252,7 +273,7 @@ echo -e "${BOLD}${GREEN}🎉 TechSquad Inc. Ghidra GPT-5 MCP Server installed su
 echo ""
 echo -e "${BOLD}📍 Installation Details:${NC}"
 echo -e "${YELLOW}  Installation Directory: $INSTALL_DIR${NC}"
-echo -e "${YELLOW}  Configuration File: $INSTALL_DIR/ghidra_gpt5_terminal_config.json${NC}"
+echo -e "${YELLOW}  Configuration File: $INSTALL_DIR/ghidra_gpt5_mcp_config.json${NC}"
 echo -e "${YELLOW}  API Key: Configured and saved${NC}"
 echo -e "${YELLOW}  Documentation: $INSTALL_DIR/GHIDRA_GPT5_DEPLOYMENT_GUIDE.md${NC}"
 echo -e "${YELLOW}  Copyright Info: $INSTALL_DIR/COPYRIGHT.txt${NC}"
@@ -261,12 +282,11 @@ echo -e "${BOLD}🚀 Next Steps:${NC}"
 echo -e "${GREEN}1. Restart your terminal to load environment variables${NC}"
 echo -e "${GREEN}2. Test the installation:${NC}"
 echo -e "${BLUE}   cd $INSTALL_DIR && ./test_ghidra_gpt5.py${NC}"
-echo -e "${GREEN}3. Add to Terminal:${NC}"
-echo -e "${BLUE}   - Open Terminal Settings${NC}"
-echo -e "${BLUE}   - Go to Features → Agent Mode → MCP Servers${NC}"
-echo -e "${BLUE}   - Click 'Add MCP Server'${NC}"
-echo -e "${BLUE}   - Use the configuration from: $INSTALL_DIR/ghidra_gpt5_terminal_config.json${NC}"
-echo -e "${GREEN}4. Restart Terminal${NC}"
+echo -e "${GREEN}3. Add to MCP Client:${NC}"
+echo -e "${BLUE}   - Configure your MCP client with the server settings${NC}"
+echo -e "${BLUE}   - Use the configuration from: $INSTALL_DIR/ghidra_gpt5_mcp_config.json${NC}"
+echo -e "${BLUE}   - Refer to your MCP client's documentation for setup steps${NC}"
+echo -e "${GREEN}4. Restart your MCP client${NC}"
 echo ""
 echo -e "${BOLD}🔧 Usage Examples:${NC}"
 echo -e "${YELLOW}call_mcp_tool(\"ghidra_binary_analysis\", {\"binary_path\": \"/path/to/binary\"})${NC}"

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Ghidra GPT-5 MCP Server for Advanced Reverse Engineering
+Version: 1.0.1
 Specialized for binary analysis, exploitation research, and malware reverse engineering
 
 Copyright (c) 2024 TechSquad Inc. - All Rights Reserved
@@ -10,6 +11,16 @@ Coded by: TheStingR
 This software is the property of TechSquad Inc. and is protected by copyright law.
 Unauthorized reproduction, distribution, or sale is strictly prohibited.
 For licensing inquiries, contact TechSquad Inc.
+
+CHANGELOG:
+v1.0.1 (2025-09-18) - Critical bug fixes reported by PurpleTeam-TechSquad
+  - Added Ghidra path auto-detection for multiple Linux distributions
+  - Enhanced cross-platform compatibility
+  - See CHANGELOG.md for complete details
+v1.0.0 (2025-09-15) - Initial release
+
+ACKNOWLEDGMENTS:
+- Issue reporting and testing: PurpleTeam-TechSquad (https://github.com/PurpleTeam-TechSquad)
 """
 
 import asyncio
@@ -31,6 +42,13 @@ from mcp.types import Tool, TextContent
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Version and metadata
+__version__ = "1.0.1"
+__author__ = "TheStingR"
+__copyright__ = "Copyright (c) 2024 TechSquad Inc. - All Rights Reserved"
+__license__ = "Proprietary - NOT FOR RESALE"
+__acknowledgments__ = "Issue reporting: PurpleTeam-TechSquad (https://github.com/PurpleTeam-TechSquad)"
+
 # OpenAI API Configuration
 OPENAI_BASE_URL = "https://api.openai.com/v1"
 OPENAI_CHAT_ENDPOINT = f"{OPENAI_BASE_URL}/chat/completions"
@@ -44,8 +62,23 @@ MAX_TOKENS_ANALYSIS = 4000
 MAX_TOKENS_EXPLOIT = 3000
 REQUEST_TIMEOUT = 120  # Longer timeout for complex analysis
 
-# Ghidra configuration
-GHIDRA_HEADLESS_PATH = os.environ.get('GHIDRA_HEADLESS_PATH', '/opt/ghidra/support/analyzeHeadless')
+# Ghidra configuration - FIXED: Support multiple installation paths
+def detect_ghidra_path():
+    """Auto-detect Ghidra installation path"""
+    paths = [
+        '/usr/share/ghidra/support/analyzeHeadless',  # Debian/Ubuntu/Kali package
+        '/opt/ghidra/support/analyzeHeadless',        # Manual install
+        '/usr/local/ghidra/support/analyzeHeadless',  # Alternative manual
+        '/usr/local/share/ghidra/support/analyzeHeadless'  # Homebrew/alternative
+    ]
+    
+    for path in paths:
+        if os.path.isfile(path) and os.access(path, os.X_OK):
+            return path
+    
+    return '/opt/ghidra/support/analyzeHeadless'  # Default fallback
+
+GHIDRA_HEADLESS_PATH = os.environ.get('GHIDRA_HEADLESS_PATH', detect_ghidra_path())
 GHIDRA_PROJECT_DIR = os.environ.get('GHIDRA_PROJECT_DIR', '/tmp/ghidra_projects')
 
 # Create server instance

@@ -1,5 +1,5 @@
 #!/bin/bash
-# TechSquad Inc. - Ghidra GPT-5 MCP Server Package Creator
+# MCP-Ghidra5 Package Creator
 #
 # Copyright (c) 2024 TechSquad Inc. - All Rights Reserved
 # Proprietary Software - NOT FOR RESALE
@@ -8,7 +8,7 @@
 # This software is the property of TechSquad Inc. and is protected by copyright law.
 # Unauthorized reproduction, distribution, or sale is strictly prohibited.
 
-PACKAGE_NAME="techsquad-ghidra-gpt5-mcp-server"
+PACKAGE_NAME="mcp-ghidra5-server"
 PACKAGE_DIR="./${PACKAGE_NAME}"
 ARCHIVE_NAME="${PACKAGE_NAME}-$(date +%Y%m%d).tar.gz"
 
