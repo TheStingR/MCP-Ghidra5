@@ -1,0 +1,38 @@
+[
+  {
+    "provider": "openai_gpt4o",
+    "name": "OpenAI GPT-4o",
+    "status": "success",
+    "response_time": 8.48,
+    "error": null,
+    "response_preview": "Reverse engineering is the process of deconstructing a system, software, or hardware to understand its components, functionality, and design. This involves analyzing the components and relationships w...",
+    "cost_estimate": 0.0079
+  },
+  {
+    "provider": "openai_gpt4",
+    "name": "OpenAI GPT-4",
+    "status": "success",
+    "response_time": 8.95,
+    "error": null,
+    "response_preview": "Reverse engineering is the process of deconstructing a device, program, or system to understand its architecture, components, and functionality, often with the aim of replicating or improving upon it....",
+    "cost_estimate": 0.0278
+  },
+  {
+    "provider": "anthropic_claude",
+    "name": "Anthropic Claude-3.5-Sonnet",
+    "status": "no_api_key",
+    "response_time": 0,
+    "error": "Environment variable ANTHROPIC_API_KEY not set",
+    "response_preview": null,
+    "cost_estimate": 0
+  },
+  {
+    "provider": "azure_openai",
+    "name": "Azure OpenAI",
+    "status": "no_api_key",
+    "response_time": 0,
+    "error": "Environment variable AZURE_OPENAI_KEY not set",
+    "response_preview": null,
+    "cost_estimate": 0
+  }
+]

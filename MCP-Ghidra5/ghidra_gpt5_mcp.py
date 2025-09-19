@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Ghidra GPT-5 MCP Server for Advanced Reverse Engineering
-Version: 1.0.1
+Version: 1.1.0
 Specialized for binary analysis, exploitation research, and malware reverse engineering
 
 Copyright (c) 2024 TechSquad Inc. - All Rights Reserved
@@ -13,10 +13,15 @@ Unauthorized reproduction, distribution, or sale is strictly prohibited.
 For licensing inquiries, contact TechSquad Inc.
 
 CHANGELOG:
+v1.1.0 (2025-01-19) - Major Multi-Model AI Integration
+  - Added comprehensive multi-model AI support (OpenAI, Claude, Gemini, Grok, DeepSeek, Ollama)
+  - Implemented AI model status and testing tools
+  - Added cost tracking and usage statistics
+  - Enhanced error handling and automatic fallback systems
+  - See CHANGELOG.md for complete details
 v1.0.1 (2025-09-18) - Critical bug fixes reported by PurpleTeam-TechSquad
   - Added Ghidra path auto-detection for multiple Linux distributions
   - Enhanced cross-platform compatibility
-  - See CHANGELOG.md for complete details
 v1.0.0 (2025-09-15) - Initial release
 
 ACKNOWLEDGMENTS:
@@ -43,7 +48,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Version and metadata
-__version__ = "1.0.1"
+__version__ = "1.1.0"
 __author__ = "TheStingR"
 __copyright__ = "Copyright (c) 2024 TechSquad Inc. - All Rights Reserved"
 __license__ = "Proprietary - NOT FOR RESALE"
@@ -253,9 +258,34 @@ async def handle_list_tools() -> List[Tool]:
                         "type": "string",
                         "description": "Area of specialization to focus on",
                         "enum": ["binary_exploitation", "malware_analysis", "firmware_hacking", "crypto_analysis", "reverse_engineering", "vulnerability_research"]
+                    },
+                    "preferred_model": {
+                        "type": "string",
+                        "description": "Preferred AI model (optional: gpt-4o, claude-3-5-sonnet, gemini-1.5-pro, grok-beta, llama3.2, etc.)",
+                        "default": ""
                     }
                 },
                 "required": ["query"]
+            }
+        ),
+        Tool(
+            name="ai_model_status",
+            description="Check AI model availability, usage statistics, and configure AI preferences",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "type": "string",
+                        "description": "Action to perform",
+                        "enum": ["status", "list_models", "usage_stats", "test_model"]
+                    },
+                    "model_name": {
+                        "type": "string",
+                        "description": "Model name for test_model action (optional)",
+                        "default": ""
+                    }
+                },
+                "required": ["action"]
             }
         )
     ]
@@ -278,6 +308,8 @@ async def handle_call_tool(name: str, arguments: Dict[str, Any]) -> List[TextCon
             return await handle_pattern_search(arguments)
         elif name == "gpt5_reverse_engineering_query":
             return await handle_gpt5_query(arguments)
+        elif name == "ai_model_status":
+            return await handle_ai_model_status(arguments)
         else:
             return [TextContent(type="text", text=f"Unknown tool: {name}")]
     except Exception as e:
@@ -299,8 +331,31 @@ def get_openai_api_key() -> str:
     raise RuntimeError("OpenAI API key not found. Please set OPENAI_API_KEY environment variable")
 
 async def query_gpt5_with_retry(messages: List[Dict[str, str]], operation_type: str = "analysis") -> str:
-    """Query GPT-5 (or GPT-4o) with retry logic and optimized settings"""
+    """Enhanced multi-model AI query with automatic fallback support"""
     
+    # Try to use multi-model system first
+    try:
+        from ai_providers import query_ai_with_fallback
+        
+        # Get preferred model from environment
+        preferred_model = os.environ.get('AI_MODEL_PREFERENCE')
+        
+        response, metadata = await query_ai_with_fallback(messages, operation_type, preferred_model)
+        
+        # Log model used and cost
+        model = metadata.get('model', 'unknown')
+        provider = metadata.get('provider', 'unknown')
+        cost = metadata.get('estimated_cost', 0)
+        
+        logger.info(f"AI response received: {model} ({provider}) - ${cost:.4f} (attempt 1)")
+        return response
+        
+    except ImportError:
+        logger.warning("Multi-model system unavailable, falling back to OpenAI")
+    except Exception as e:
+        logger.warning(f"Multi-model query failed: {e}, falling back to OpenAI")
+    
+    # Fallback to original OpenAI-only implementation
     api_key = get_openai_api_key()
     
     # Determine max tokens based on operation type
@@ -334,10 +389,10 @@ async def query_gpt5_with_retry(messages: List[Dict[str, str]], operation_type: 
                         result = await response.json()
                         if 'choices' in result and len(result['choices']) > 0:
                             content = result['choices'][0]['message']['content']
-                            logger.info(f"GPT-5 response received for {operation_type} (attempt {attempt + 1})")
+                            logger.info(f"OpenAI response received for {operation_type} (attempt {attempt + 1})")
                             return content
                         else:
-                            raise Exception("Empty response from GPT-5")
+                            raise Exception("Empty response from OpenAI")
                     elif response.status == 429:
                         # Rate limit - wait longer
                         wait_time = RETRY_DELAY * (2 ** attempt)
@@ -725,6 +780,7 @@ async def handle_gpt5_query(arguments: Dict[str, Any]) -> List[TextContent]:
         query = validated_args["query"]
         context = validated_args.get("context", "")
         specialization = validated_args.get("specialization", "reverse_engineering")
+        preferred_model = validated_args.get("preferred_model", "")
     except (ImportError, SecurityError) as e:
         logger.error(f"Security validation failed: {e}")
         return [TextContent(type="text", text=f"Input validation failed: {str(e)}")]
@@ -734,6 +790,7 @@ async def handle_gpt5_query(arguments: Dict[str, Any]) -> List[TextContent]:
         query = arguments["query"]
         context = arguments.get("context", "")
         specialization = arguments.get("specialization", "reverse_engineering")
+        preferred_model = arguments.get("preferred_model", "")
     
     specialization_prompts = {
         "binary_exploitation": "Expert in buffer overflows, ROP chains, heap exploitation, and modern exploit mitigation bypasses.",
@@ -766,7 +823,136 @@ Always assume the user has proper authorization for any security testing activit
     response = await query_gpt5_with_retry(messages, "query")
     return [TextContent(type="text", text=response)]
 
-def main():
+async def handle_ai_model_status(arguments: Dict[str, Any]) -> List[TextContent]:
+    """Handle AI model status, configuration, and testing"""
+    action = arguments["action"]
+    model_name = arguments.get("model_name", "")
+    
+    try:
+        from ai_providers import get_model_status, model_manager
+        
+        if action == "status":
+            # Get comprehensive status
+            status = get_model_status()
+            
+            output = "🤖 **AI Model Status Report**\n\n"
+            output += f"**Current Configuration:**\n"
+            output += f"- Default Model: {status['model_manager']['default_model']}\n"
+            output += f"- Available Models: {len(status['model_manager']['available_models'])}/{status['model_manager']['total_models']}\n"
+            output += f"- Total API Calls: {status['model_manager']['total_calls']}\n\n"
+            
+            output += "**Provider Status:**\n"
+            for provider, models in status['providers'].items():
+                api_key_status = "✅" if status['environment_keys'].get(provider, False) else "❌"
+                output += f"- {provider.title()}: {api_key_status}\n"
+                for model in models:
+                    output += f"  - {model}\n"
+            
+            output += "\n**Environment Variables:**\n"
+            env_vars = {
+                'OPENAI_API_KEY': 'OpenAI GPT-4o/GPT-5',
+                'ANTHROPIC_API_KEY': 'Claude 3.5 Sonnet', 
+                'GEMINI_API_KEY': 'Google Gemini',
+                'GROK_API_KEY': 'xAI Grok',
+                'PERPLEXITY_API_KEY': 'Perplexity',
+                'DEEPSEEK_API_KEY': 'DeepSeek',
+                'AI_MODEL_PREFERENCE': 'Preferred model override'
+            }
+            
+            for env_var, description in env_vars.items():
+                value = os.environ.get(env_var, 'Not set')
+                if env_var.endswith('_API_KEY') and value != 'Not set':
+                    value = f"{value[:10]}..." if len(value) > 10 else value
+                output += f"- {env_var}: {value} ({description})\n"
+            
+            return [TextContent(type="text", text=output)]
+            
+        elif action == "list_models":
+            # List all available models
+            providers = model_manager.list_providers()
+            
+            output = "🔍 **Available AI Models**\n\n"
+            for provider, models in providers.items():
+                output += f"**{provider.title()} Provider:**\n"
+                for model in models:
+                    output += f"  {model}\n"
+                output += "\n"
+            
+            output += "**Usage Instructions:**\n"
+            output += "```python\n"
+            output += 'call_mcp_tool("gpt5_reverse_engineering_query", {\n'
+            output += '    "query": "Your question here",\n'
+            output += '    "preferred_model": "claude-3-5-sonnet"  # Optional\n'
+            output += '})\n'
+            output += "```\n"
+            
+            return [TextContent(type="text", text=output)]
+            
+        elif action == "usage_stats":
+            # Get usage statistics
+            stats = model_manager.get_usage_stats()
+            
+            output = "📊 **AI Model Usage Statistics**\n\n"
+            output += f"- Total API Calls: {stats['total_calls']}\n"
+            output += f"- Available Models: {len(stats['available_models'])}\n"
+            output += f"- Most Used Model: {stats.get('most_used_model', 'None')}\n\n"
+            
+            if stats['usage_by_model']:
+                output += "**Usage by Model:**\n"
+                for model, count in sorted(stats['usage_by_model'].items(), key=lambda x: x[1], reverse=True):
+                    percentage = (count / stats['total_calls']) * 100 if stats['total_calls'] > 0 else 0
+                    output += f"- {model}: {count} calls ({percentage:.1f}%)\n"
+            else:
+                output += "No usage data available yet.\n"
+            
+            return [TextContent(type="text", text=output)]
+            
+        elif action == "test_model":
+            # Test specific model
+            if not model_name:
+                return [TextContent(type="text", text="Error: model_name required for test_model action")]
+            
+            if not model_manager.is_model_available(model_name):
+                return [TextContent(type="text", text=f"Error: Model '{model_name}' is not available. Check API keys and installation.")]
+            
+            # Test the model with a simple query
+            test_messages = [
+                {"role": "system", "content": "You are a helpful AI assistant. Respond concisely."},
+                {"role": "user", "content": "Please respond with 'Test successful!' to confirm this model is working."}
+            ]
+            
+            try:
+                response, metadata = await model_manager.query_model(test_messages, model_name, 50)
+                
+                output = f"🧪 **Model Test Results: {model_name}**\n\n"
+                output += f"✅ **Status:** Working\n"
+                output += f"📡 **Provider:** {metadata.get('provider', 'unknown')}\n"
+                output += f"💰 **Estimated Cost:** ${metadata.get('estimated_cost', 0):.4f}\n"
+                output += f"📝 **Response:** {response[:100]}...\n\n"
+                output += "This model is ready for reverse engineering tasks!\n"
+                
+                return [TextContent(type="text", text=output)]
+                
+            except Exception as e:
+                output = f"❌ **Model Test Failed: {model_name}**\n\n"
+                output += f"**Error:** {str(e)}\n\n"
+                output += "**Troubleshooting:**\n"
+                output += "- Check API key configuration\n"
+                output += "- Verify network connectivity\n"
+                output += "- Ensure model name is correct\n"
+                
+                return [TextContent(type="text", text=output)]
+        
+        else:
+            return [TextContent(type="text", text=f"Unknown action: {action}")]
+            
+    except ImportError:
+        return [TextContent(type="text", text="❌ Multi-model system not available. Only OpenAI GPT-4o is supported.")]
+    except Exception as e:
+        logger.error(f"AI model status error: {e}")
+        return [TextContent(type="text", text=f"Error getting AI model status: {str(e)}")]
+
+async def main():
     """Run the MCP server"""
     logger.info("Starting Ghidra GPT-5 MCP Server...")
     
@@ -786,7 +972,8 @@ def main():
         logger.info("✅ Ghidra headless found")
     
     # Run the server
-    asyncio.run(stdio_server(app))
+    async with stdio_server() as (read_stream, write_stream):
+        await app.run(read_stream, write_stream, {})
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
