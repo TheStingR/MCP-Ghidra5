@@ -59,7 +59,8 @@ sudo tar -xzf ghidra_*.zip -C /opt/ && sudo mv /opt/ghidra_* /opt/ghidra
 wget https://github.com/TheStingR/MCP-Ghidra5/archive/main.zip
 unzip main.zip && cd MCP-Ghidra5-main
 
-# 3. Run comprehensive installer
+# 3. Navigate to the MCP-Ghidra5 directory and run installer
+cd MCP-Ghidra5
 ./install_mcp_ghidra5.sh
 # Follow prompts: Accept terms → Enter API key → Done!
 
@@ -86,7 +87,8 @@ export GHIDRA_HEADLESS_PATH="/opt/ghidra/support/analyzeHeadless"
 # 4. Verify Ghidra installation
 $GHIDRA_HEADLESS_PATH -help || echo "ERROR: Ghidra not found!"
 
-# 5. Run server
+# 5. Navigate to MCP-Ghidra5 directory and run server
+cd MCP-Ghidra5
 python3 ghidra_gpt5_mcp.py
 ```
 

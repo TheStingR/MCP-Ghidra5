@@ -153,21 +153,36 @@ echo -e "${GREEN}✅ Directory created: $INSTALL_DIR${NC}"
 # Copy TechSquad files
 echo -e "${BLUE}📋 Installing TechSquad proprietary files...${NC}"
 
-# List of files to copy
+# List of files to copy from MCP-Ghidra5 directory
 FILES=(
     "ghidra_gpt5_mcp.py"
     "run_ghidra_gpt5.sh"
     "test_ghidra_gpt5.py"
+)
+
+# Files to copy from parent directory (docs)
+DOC_FILES=(
     "GHIDRA_GPT5_DEPLOYMENT_GUIDE.md"
     "COPYRIGHT.txt"
 )
 
+# Copy files from MCP-Ghidra5 directory
 for file in "${FILES[@]}"; do
     if [[ -f "$SCRIPT_DIR/$file" ]]; then
         cp "$SCRIPT_DIR/$file" "$INSTALL_DIR/"
         echo -e "${GREEN}  ✅ Copied $file${NC}"
     else
         echo -e "${YELLOW}  ⚠️  Warning: $file not found${NC}"
+    fi
+done
+
+# Copy documentation files from parent directory
+for file in "${DOC_FILES[@]}"; do
+    if [[ -f "$SCRIPT_DIR/../$file" ]]; then
+        cp "$SCRIPT_DIR/../$file" "$INSTALL_DIR/"
+        echo -e "${GREEN}  ✅ Copied $file${NC}"
+    else
+        echo -e "${YELLOW}  ⚠️  Warning: $file not found in parent directory${NC}"
     fi
 done
 
