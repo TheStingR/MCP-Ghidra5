@@ -412,9 +412,23 @@ def run_ghidra_headless(binary_path: str, script_path: str = None, additional_ar
 
 async def handle_binary_analysis(arguments: Dict[str, Any]) -> List[TextContent]:
     """Handle comprehensive binary analysis using Ghidra + GPT-5"""
-    binary_path = arguments["binary_path"]
-    analysis_depth = arguments.get("analysis_depth", "standard")
-    focus_areas = arguments.get("focus_areas", [])
+    # Import security utilities
+    try:
+        from security_utils import validate_binary_analysis_args, SecurityError
+        # Validate and sanitize inputs
+        validated_args = validate_binary_analysis_args(arguments)
+        binary_path = validated_args["binary_path"]
+        analysis_depth = validated_args.get("analysis_depth", "standard")
+        focus_areas = validated_args.get("focus_areas", [])
+    except (ImportError, SecurityError) as e:
+        logger.error(f"Security validation failed: {e}")
+        return [TextContent(type="text", text=f"Security validation failed: {str(e)}")]
+    except Exception as e:
+        # Fallback to basic validation if security module unavailable
+        logger.warning(f"Security module unavailable, using basic validation: {e}")
+        binary_path = arguments["binary_path"]
+        analysis_depth = arguments.get("analysis_depth", "standard")
+        focus_areas = arguments.get("focus_areas", [])
     
     # Run Ghidra analysis
     ghidra_output = run_ghidra_headless(binary_path)
@@ -703,9 +717,23 @@ Be specific about addresses, function names, and exploitation potential."""
 
 async def handle_gpt5_query(arguments: Dict[str, Any]) -> List[TextContent]:
     """Handle direct GPT-5 queries for reverse engineering"""
-    query = arguments["query"]
-    context = arguments.get("context", "")
-    specialization = arguments.get("specialization", "reverse_engineering")
+    # Import security utilities for input validation
+    try:
+        from security_utils import validate_gpt5_query_args, SecurityError
+        # Validate and sanitize inputs
+        validated_args = validate_gpt5_query_args(arguments)
+        query = validated_args["query"]
+        context = validated_args.get("context", "")
+        specialization = validated_args.get("specialization", "reverse_engineering")
+    except (ImportError, SecurityError) as e:
+        logger.error(f"Security validation failed: {e}")
+        return [TextContent(type="text", text=f"Input validation failed: {str(e)}")]
+    except Exception as e:
+        # Fallback to basic validation if security module unavailable
+        logger.warning(f"Security module unavailable, using basic validation: {e}")
+        query = arguments["query"]
+        context = arguments.get("context", "")
+        specialization = arguments.get("specialization", "reverse_engineering")
     
     specialization_prompts = {
         "binary_exploitation": "Expert in buffer overflows, ROP chains, heap exploitation, and modern exploit mitigation bypasses.",
