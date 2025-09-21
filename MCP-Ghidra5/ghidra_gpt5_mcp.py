@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Ghidra GPT-5 MCP Server for Advanced Reverse Engineering
-Version: 1.1.0
+Version: 1.2.0
 Specialized for binary analysis, exploitation research, and malware reverse engineering
 
 Copyright (c) 2024 TechSquad Inc. - All Rights Reserved
@@ -48,7 +48,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Version and metadata
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 __author__ = "TheStingR"
 __copyright__ = "Copyright (c) 2024 TechSquad Inc. - All Rights Reserved"
 __license__ = "Proprietary - NOT FOR RESALE"
@@ -287,6 +287,176 @@ async def handle_list_tools() -> List[Tool]:
                 },
                 "required": ["action"]
             }
+        ),
+        # Tier 1 Binary Analysis Tools (Phase 1 Quick Wins)
+        Tool(
+            name="binary_strings_analysis",
+            description="Extract and analyze strings from binary files with AI-powered interpretation",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "binary_path": {
+                        "type": "string",
+                        "description": "Path to binary file for strings extraction"
+                    },
+                    "min_length": {
+                        "type": "integer",
+                        "description": "Minimum string length (default: 4)",
+                        "default": 4
+                    },
+                    "encoding": {
+                        "type": "string",
+                        "description": "String encoding to search for",
+                        "enum": ["ascii", "utf-8", "utf-16", "all"],
+                        "default": "all"
+                    },
+                    "output_format": {
+                        "type": "string",
+                        "description": "Output format",
+                        "enum": ["text", "json"],
+                        "default": "text"
+                    },
+                    "ai_analysis": {
+                        "type": "boolean",
+                        "description": "Enable AI-powered string analysis",
+                        "default": True
+                    }
+                },
+                "required": ["binary_path"]
+            }
+        ),
+        Tool(
+            name="binary_file_info",
+            description="Get comprehensive file type information and metadata analysis",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "binary_path": {
+                        "type": "string",
+                        "description": "Path to binary file"
+                    },
+                    "output_format": {
+                        "type": "string",
+                        "description": "Output format",
+                        "enum": ["text", "json"],
+                        "default": "text"
+                    },
+                    "detailed": {
+                        "type": "boolean",
+                        "description": "Enable detailed analysis with AI interpretation",
+                        "default": True
+                    }
+                },
+                "required": ["binary_path"]
+            }
+        ),
+        Tool(
+            name="binary_objdump_analysis",
+            description="Disassemble binary with objdump and provide AI-powered analysis",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "binary_path": {
+                        "type": "string",
+                        "description": "Path to binary file"
+                    },
+                    "analysis_type": {
+                        "type": "string",
+                        "description": "Type of objdump analysis",
+                        "enum": ["headers", "disassemble", "symbols", "sections", "relocs", "dynamic", "all"],
+                        "default": "all"
+                    },
+                    "architecture": {
+                        "type": "string",
+                        "description": "Target architecture (auto-detected if not specified)",
+                        "default": ""
+                    },
+                    "output_format": {
+                        "type": "string",
+                        "description": "Output format",
+                        "enum": ["text", "json"],
+                        "default": "text"
+                    },
+                    "ai_analysis": {
+                        "type": "boolean",
+                        "description": "Enable AI-powered disassembly analysis",
+                        "default": True
+                    }
+                },
+                "required": ["binary_path"]
+            }
+        ),
+        Tool(
+            name="binary_readelf_analysis",
+            description="Analyze ELF binaries with readelf and AI-powered interpretation",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "binary_path": {
+                        "type": "string",
+                        "description": "Path to ELF binary file"
+                    },
+                    "analysis_type": {
+                        "type": "string",
+                        "description": "Type of readelf analysis",
+                        "enum": ["headers", "sections", "symbols", "relocs", "dynamic", "notes", "all"],
+                        "default": "all"
+                    },
+                    "output_format": {
+                        "type": "string",
+                        "description": "Output format",
+                        "enum": ["text", "json"],
+                        "default": "text"
+                    },
+                    "ai_analysis": {
+                        "type": "boolean",
+                        "description": "Enable AI-powered ELF analysis",
+                        "default": True
+                    }
+                },
+                "required": ["binary_path"]
+            }
+        ),
+        Tool(
+            name="binary_hexdump_analysis",
+            description="Generate hex dumps with pattern recognition and AI analysis",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "binary_path": {
+                        "type": "string",
+                        "description": "Path to binary file"
+                    },
+                    "offset": {
+                        "type": "integer",
+                        "description": "Starting offset (default: 0)",
+                        "default": 0
+                    },
+                    "length": {
+                        "type": "integer",
+                        "description": "Number of bytes to dump (default: 512)",
+                        "default": 512
+                    },
+                    "format": {
+                        "type": "string",
+                        "description": "Hex dump format",
+                        "enum": ["canonical", "octal", "hex", "decimal"],
+                        "default": "canonical"
+                    },
+                    "output_format": {
+                        "type": "string",
+                        "description": "Output format",
+                        "enum": ["text", "json"],
+                        "default": "text"
+                    },
+                    "ai_analysis": {
+                        "type": "boolean",
+                        "description": "Enable AI-powered hex pattern analysis",
+                        "default": True
+                    }
+                },
+                "required": ["binary_path"]
+            }
         )
     ]
 
@@ -310,6 +480,17 @@ async def handle_call_tool(name: str, arguments: Dict[str, Any]) -> List[TextCon
             return await handle_gpt5_query(arguments)
         elif name == "ai_model_status":
             return await handle_ai_model_status(arguments)
+        # Tier 1 Binary Analysis Tools (Phase 1 Quick Wins)
+        elif name == "binary_strings_analysis":
+            return await handle_strings_analysis(arguments)
+        elif name == "binary_file_info":
+            return await handle_file_info(arguments)
+        elif name == "binary_objdump_analysis":
+            return await handle_objdump_analysis(arguments)
+        elif name == "binary_readelf_analysis":
+            return await handle_readelf_analysis(arguments)
+        elif name == "binary_hexdump_analysis":
+            return await handle_hexdump_analysis(arguments)
         else:
             return [TextContent(type="text", text=f"Unknown tool: {name}")]
     except Exception as e:
@@ -815,9 +996,10 @@ Provide detailed, technical, and actionable responses. Include:
 
 Always assume the user has proper authorization for any security testing activities."""
 
+    additional_context = f"\n\nAdditional Context:\n{context}" if context else ""
     messages = [
         {"role": "system", "content": system_prompt},
-        {"role": "user", "content": f"{query}\n\n{('Additional Context:\n' + context) if context else ''}"}
+        {"role": "user", "content": f"{query}{additional_context}"}
     ]
     
     response = await query_gpt5_with_retry(messages, "query")
@@ -951,6 +1133,349 @@ async def handle_ai_model_status(arguments: Dict[str, Any]) -> List[TextContent]
     except Exception as e:
         logger.error(f"AI model status error: {e}")
         return [TextContent(type="text", text=f"Error getting AI model status: {str(e)}")]
+
+# ===== TIER 1 BINARY ANALYSIS TOOL HANDLERS (Phase 1 Quick Wins) =====
+
+async def handle_strings_analysis(arguments: Dict[str, Any]) -> List[TextContent]:
+    """Handle strings extraction and analysis"""
+    try:
+        from tier1_tools import run_strings_analysis, format_output_as_json, format_output_as_text
+        
+        binary_path = arguments["binary_path"]
+        min_length = arguments.get("min_length", 4)
+        encoding = arguments.get("encoding", "all")
+        output_format = arguments.get("output_format", "text")
+        ai_analysis = arguments.get("ai_analysis", True)
+        
+        # Run strings analysis
+        result = await run_strings_analysis(binary_path, min_length, encoding)
+        
+        # Format output
+        if output_format == "json":
+            formatted_result = format_output_as_json(result, "strings")
+            output_text = json.dumps(formatted_result, indent=2)
+        else:
+            output_text = format_output_as_text(result, "strings")
+        
+        # Add AI analysis if requested
+        if ai_analysis and result.get("results"):
+            # Extract interesting strings for AI analysis
+            all_patterns = {}
+            total_strings = 0
+            
+            for enc_result in result["results"].values():
+                if isinstance(enc_result, dict) and "sample_analysis" in enc_result:
+                    patterns = enc_result["sample_analysis"]
+                    for pattern_type, items in patterns.items():
+                        if items:
+                            all_patterns.setdefault(pattern_type, []).extend(items)
+                    total_strings += enc_result.get("count", 0)
+            
+            if all_patterns and any(all_patterns.values()):
+                ai_prompt = f"""Analyze the following strings extracted from a binary file and provide security insights:
+
+Binary: {binary_path}
+Total strings found: {total_strings}
+
+Interesting patterns found:
+"""
+                for pattern_type, items in all_patterns.items():
+                    if items:
+                        ai_prompt += f"\n{pattern_type.upper()}:\n"
+                        for item in items[:10]:  # Limit to 10 items per category
+                            ai_prompt += f"  - {item}\n"
+                
+                ai_prompt += "\n\nProvide analysis focusing on:\n1. Security implications of these strings\n2. Potential attack vectors or vulnerabilities\n3. Information disclosure risks\n4. Suspicious or interesting findings\n5. Recommendations for further investigation"
+                
+                messages = [
+                    {"role": "system", "content": "You are a cybersecurity expert analyzing binary strings for security implications."},
+                    {"role": "user", "content": ai_prompt}
+                ]
+                
+                try:
+                    ai_response = await query_gpt5_with_retry(messages, "analysis")
+                    output_text += f"\n\n=== AI SECURITY ANALYSIS ===\n{ai_response}"
+                except Exception as e:
+                    logger.warning(f"AI analysis failed: {e}")
+                    output_text += f"\n\n=== AI ANALYSIS UNAVAILABLE ===\nError: {str(e)}"
+        
+        return [TextContent(type="text", text=output_text)]
+        
+    except Exception as e:
+        logger.error(f"Strings analysis failed: {e}")
+        return [TextContent(type="text", text=f"Strings analysis failed: {str(e)}")]
+
+async def handle_file_info(arguments: Dict[str, Any]) -> List[TextContent]:
+    """Handle file information analysis"""
+    try:
+        from tier1_tools import run_file_analysis, format_output_as_json, format_output_as_text
+        
+        binary_path = arguments["binary_path"]
+        output_format = arguments.get("output_format", "text")
+        detailed = arguments.get("detailed", True)
+        
+        # Run file analysis
+        result = await run_file_analysis(binary_path)
+        
+        # Format output
+        if output_format == "json":
+            formatted_result = format_output_as_json(result, "file")
+            output_text = json.dumps(formatted_result, indent=2)
+        else:
+            output_text = format_output_as_text(result, "file")
+        
+        # Add AI analysis if detailed analysis is requested
+        if detailed and result.get("basic", {}).get("success"):
+            file_info = result["basic"]["output"]
+            mime_info = result.get("mime", {}).get("output", "")
+            file_stats = result.get("file_stats", {})
+            
+            ai_prompt = f"""Analyze this file information and provide security assessment:
+
+File: {binary_path}
+File command output: {file_info}
+MIME type: {mime_info}
+File size: {file_stats.get('size', 'unknown')} bytes
+Executable: {file_stats.get('is_executable', 'unknown')}
+
+Provide analysis focusing on:
+1. File type and architecture implications
+2. Potential security risks or concerns
+3. Interesting characteristics or anomalies
+4. Recommended analysis approaches
+5. Exploitation potential assessment"""
+            
+            messages = [
+                {"role": "system", "content": "You are a cybersecurity expert analyzing file metadata for security implications."},
+                {"role": "user", "content": ai_prompt}
+            ]
+            
+            try:
+                ai_response = await query_gpt5_with_retry(messages, "analysis")
+                output_text += f"\n\n=== AI SECURITY ANALYSIS ===\n{ai_response}"
+            except Exception as e:
+                logger.warning(f"AI analysis failed: {e}")
+                output_text += f"\n\n=== AI ANALYSIS UNAVAILABLE ===\nError: {str(e)}"
+        
+        return [TextContent(type="text", text=output_text)]
+        
+    except Exception as e:
+        logger.error(f"File analysis failed: {e}")
+        return [TextContent(type="text", text=f"File analysis failed: {str(e)}")]
+
+async def handle_objdump_analysis(arguments: Dict[str, Any]) -> List[TextContent]:
+    """Handle objdump disassembly and analysis"""
+    try:
+        from tier1_tools import run_objdump_analysis, format_output_as_json, format_output_as_text
+        
+        binary_path = arguments["binary_path"]
+        analysis_type = arguments.get("analysis_type", "all")
+        architecture = arguments.get("architecture", "")
+        output_format = arguments.get("output_format", "text")
+        ai_analysis = arguments.get("ai_analysis", True)
+        
+        # Run objdump analysis
+        result = await run_objdump_analysis(binary_path, analysis_type, architecture)
+        
+        # Format output
+        if output_format == "json":
+            formatted_result = format_output_as_json(result, "objdump")
+            output_text = json.dumps(formatted_result, indent=2)
+        else:
+            output_text = format_output_as_text(result, "objdump")
+        
+        # Add AI analysis if requested
+        if ai_analysis and result.get("results"):
+            # Summarize results for AI analysis
+            analysis_summary = f"Objdump analysis results for {binary_path}:\n\n"
+            
+            for analysis_name, analysis_data in result["results"].items():
+                if analysis_data.get("success"):
+                    summary = analysis_data.get("summary", {})
+                    analysis_summary += f"{analysis_name.upper()}:\n"
+                    if summary:
+                        for key, value in summary.items():
+                            analysis_summary += f"  - {key}: {value}\n"
+                    
+                    # Include first few lines of output for context
+                    output = analysis_data.get("output", "")
+                    if output:
+                        lines = output.split('\n')[:10]  # First 10 lines
+                        analysis_summary += f"  Sample output:\n"
+                        for line in lines:
+                            if line.strip():
+                                analysis_summary += f"    {line}\n"
+                    analysis_summary += "\n"
+            
+            ai_prompt = f"""{analysis_summary}
+
+Provide comprehensive binary analysis focusing on:
+1. Architecture and compilation characteristics
+2. Security features and mitigations present
+3. Potential vulnerabilities or attack vectors
+4. Function analysis and entry points
+5. Exploitation assessment and recommendations
+6. Suspicious patterns or anomalies"""
+            
+            messages = [
+                {"role": "system", "content": "You are a cybersecurity expert analyzing objdump output for security implications."},
+                {"role": "user", "content": ai_prompt}
+            ]
+            
+            try:
+                ai_response = await query_gpt5_with_retry(messages, "analysis")
+                output_text += f"\n\n=== AI SECURITY ANALYSIS ===\n{ai_response}"
+            except Exception as e:
+                logger.warning(f"AI analysis failed: {e}")
+                output_text += f"\n\n=== AI ANALYSIS UNAVAILABLE ===\nError: {str(e)}"
+        
+        return [TextContent(type="text", text=output_text)]
+        
+    except Exception as e:
+        logger.error(f"Objdump analysis failed: {e}")
+        return [TextContent(type="text", text=f"Objdump analysis failed: {str(e)}")]
+
+async def handle_readelf_analysis(arguments: Dict[str, Any]) -> List[TextContent]:
+    """Handle readelf ELF analysis"""
+    try:
+        from tier1_tools import run_readelf_analysis, format_output_as_json, format_output_as_text
+        
+        binary_path = arguments["binary_path"]
+        analysis_type = arguments.get("analysis_type", "all")
+        output_format = arguments.get("output_format", "text")
+        ai_analysis = arguments.get("ai_analysis", True)
+        
+        # Run readelf analysis
+        result = await run_readelf_analysis(binary_path, analysis_type)
+        
+        # Format output
+        if output_format == "json":
+            formatted_result = format_output_as_json(result, "readelf")
+            output_text = json.dumps(formatted_result, indent=2)
+        else:
+            output_text = format_output_as_text(result, "readelf")
+        
+        # Add AI analysis if requested
+        if ai_analysis and result.get("results"):
+            # Summarize results for AI analysis
+            analysis_summary = f"Readelf ELF analysis results for {binary_path}:\n\n"
+            
+            for analysis_name, analysis_data in result["results"].items():
+                if analysis_data.get("success"):
+                    summary = analysis_data.get("summary", {})
+                    analysis_summary += f"{analysis_name.upper()}:\n"
+                    if summary:
+                        for key, value in summary.items():
+                            analysis_summary += f"  - {key}: {value}\n"
+                    
+                    # Include relevant lines from output
+                    output = analysis_data.get("output", "")
+                    if output and analysis_name == "headers":
+                        lines = [line for line in output.split('\n')[:20] if line.strip()]  # First 20 lines
+                        analysis_summary += f"  Key information:\n"
+                        for line in lines:
+                            if any(keyword in line for keyword in ["Class:", "Data:", "Machine:", "Entry point:"]):
+                                analysis_summary += f"    {line.strip()}\n"
+                    analysis_summary += "\n"
+            
+            ai_prompt = f"""{analysis_summary}
+
+Provide ELF-specific security analysis focusing on:
+1. ELF structure and format analysis
+2. Security mitigations and protections
+3. Dynamic linking and library dependencies
+4. Entry points and execution flow
+5. Potential exploitation vectors
+6. Suspicious sections or symbols
+7. Recommendations for further analysis"""
+            
+            messages = [
+                {"role": "system", "content": "You are a cybersecurity expert analyzing ELF binaries for security implications."},
+                {"role": "user", "content": ai_prompt}
+            ]
+            
+            try:
+                ai_response = await query_gpt5_with_retry(messages, "analysis")
+                output_text += f"\n\n=== AI SECURITY ANALYSIS ===\n{ai_response}"
+            except Exception as e:
+                logger.warning(f"AI analysis failed: {e}")
+                output_text += f"\n\n=== AI ANALYSIS UNAVAILABLE ===\nError: {str(e)}"
+        
+        return [TextContent(type="text", text=output_text)]
+        
+    except Exception as e:
+        logger.error(f"Readelf analysis failed: {e}")
+        return [TextContent(type="text", text=f"Readelf analysis failed: {str(e)}")]
+
+async def handle_hexdump_analysis(arguments: Dict[str, Any]) -> List[TextContent]:
+    """Handle hexdump analysis with pattern recognition"""
+    try:
+        from tier1_tools import run_hexdump_analysis, format_output_as_json, format_output_as_text
+        
+        binary_path = arguments["binary_path"]
+        offset = arguments.get("offset", 0)
+        length = arguments.get("length", 512)
+        format_type = arguments.get("format", "canonical")
+        output_format = arguments.get("output_format", "text")
+        ai_analysis = arguments.get("ai_analysis", True)
+        
+        # Run hexdump analysis
+        result = await run_hexdump_analysis(binary_path, offset, length, format_type)
+        
+        # Format output
+        if output_format == "json":
+            formatted_result = format_output_as_json(result, "hexdump")
+            output_text = json.dumps(formatted_result, indent=2)
+        else:
+            output_text = format_output_as_text(result, "hexdump")
+        
+        # Add AI analysis if requested
+        if ai_analysis and result.get("success") and result.get("pattern_analysis"):
+            patterns = result["pattern_analysis"]
+            hex_output = result.get("output", "")
+            
+            ai_prompt = f"""Analyze this hex dump from a binary file:
+
+File: {binary_path}
+Offset: {offset}, Length: {length} bytes
+
+Pattern Analysis:
+- Null bytes: {patterns.get('null_bytes', 0)}
+- Printable ratio: {patterns.get('printable_ratio', 0):.2%}
+- Entropy estimate: {patterns.get('entropy_estimate', 0):.2f}
+- Magic signatures found: {patterns.get('magic_signatures', [])}
+
+Hex dump (first 10 lines):
+{chr(10).join(hex_output.split(chr(10))[:10])}
+
+Provide analysis focusing on:
+1. Data structure patterns and format identification
+2. Potential embedded files or resources
+3. Cryptographic signatures or keys
+4. Suspicious or anomalous patterns
+5. File format verification
+6. Security implications of the data
+7. Recommendations for further investigation"""
+            
+            messages = [
+                {"role": "system", "content": "You are a cybersecurity expert analyzing hex dumps for security implications and data patterns."},
+                {"role": "user", "content": ai_prompt}
+            ]
+            
+            try:
+                ai_response = await query_gpt5_with_retry(messages, "analysis")
+                output_text += f"\n\n=== AI PATTERN ANALYSIS ===\n{ai_response}"
+            except Exception as e:
+                logger.warning(f"AI analysis failed: {e}")
+                output_text += f"\n\n=== AI ANALYSIS UNAVAILABLE ===\nError: {str(e)}"
+        
+        return [TextContent(type="text", text=output_text)]
+        
+    except Exception as e:
+        logger.error(f"Hexdump analysis failed: {e}")
+        return [TextContent(type="text", text=f"Hexdump analysis failed: {str(e)}")]
+
+# ===== END TIER 1 HANDLERS =====
 
 async def main():
     """Run the MCP server"""

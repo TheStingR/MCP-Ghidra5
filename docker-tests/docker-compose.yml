@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  ubuntu22-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.ubuntu22
+    image: mcp-ghidra5-test-ubuntu22
+    container_name: mcp-ghidra5-ubuntu22-test
+    volumes:
+      - ..:/home/testuser/mcp-ghidra5-test
+    environment:
+      - OPENAI_API_KEY=test_key_placeholder
+      - SKIP_API_KEY_INPUT=1
+      - SKIP_GHIDRA_DOWNLOAD=1
+    working_dir: /home/testuser
+    command: /home/testuser/mcp-ghidra5-test/docker-tests/container_test.sh
+    profiles: ["ubuntu22", "all"]
+
+  ubuntu24-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.ubuntu24
+    image: mcp-ghidra5-test-ubuntu24
+    container_name: mcp-ghidra5-ubuntu24-test
+    volumes:
+      - ..:/home/testuser/mcp-ghidra5-test
+    environment:
+      - OPENAI_API_KEY=test_key_placeholder
+      - SKIP_API_KEY_INPUT=1
+      - SKIP_GHIDRA_DOWNLOAD=1
+    working_dir: /home/testuser
+    command: /home/testuser/mcp-ghidra5-test/docker-tests/container_test.sh
+    profiles: ["ubuntu24", "all"]
+
+  kali-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.kali
+    image: mcp-ghidra5-test-kali
+    container_name: mcp-ghidra5-kali-test
+    volumes:
+      - ..:/home/testuser/mcp-ghidra5-test
+    environment:
+      - OPENAI_API_KEY=test_key_placeholder
+      - SKIP_API_KEY_INPUT=1
+      - SKIP_GHIDRA_DOWNLOAD=1
+      - GHIDRA_HEADLESS_PATH=/usr/share/ghidra/support/analyzeHeadless
+    working_dir: /home/testuser
+    command: /home/testuser/mcp-ghidra5-test/docker-tests/container_test.sh
+    profiles: ["kali", "all"]
+
+  debian12-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.debian12
+    image: mcp-ghidra5-test-debian12
+    container_name: mcp-ghidra5-debian12-test
+    volumes:
+      - ..:/home/testuser/mcp-ghidra5-test
+    environment:
+      - OPENAI_API_KEY=test_key_placeholder
+      - SKIP_API_KEY_INPUT=1
+      - SKIP_GHIDRA_DOWNLOAD=1
+    working_dir: /home/testuser
+    command: /home/testuser/mcp-ghidra5-test/docker-tests/container_test.sh
+    profiles: ["debian12", "all"]

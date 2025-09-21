@@ -1,12 +1,14 @@
-# MCP-Ghidra5
-
 <div align="center">
+
+![MCP-Ghidra5 Logo](mcp-ghidra5.png)
+
+# MCP-Ghidra5
 
 ![Python](https://img.shields.io/badge/python-v3.8+-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)
 ![License](https://img.shields.io/badge/license-proprietary-red.svg)
 ![Status](https://img.shields.io/badge/status-stable-green.svg)
-![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)
 ![MCP](https://img.shields.io/badge/MCP-Server-purple.svg)
 ![Ghidra](https://img.shields.io/badge/Ghidra-Compatible-orange.svg)
 ![GPT](https://img.shields.io/badge/GPT--5-Powered-brightgreen.svg)
@@ -149,10 +151,50 @@ call_mcp_tool("ai_model_status", {
 })
 ```
 
+### **Tier 1 Binary Analysis Tools** 🆕 **v1.2.0**
+```python
+# Strings extraction with AI analysis
+call_mcp_tool("binary_strings_analysis", {
+    "binary_path": "/path/to/binary",
+    "min_length": 6,
+    "encoding": "all",
+    "output_format": "json",
+    "ai_analysis": True
+})
+
+# File information and metadata
+call_mcp_tool("binary_file_info", {
+    "binary_path": "/path/to/binary",
+    "detailed": True
+})
+
+# Objdump disassembly analysis
+call_mcp_tool("binary_objdump_analysis", {
+    "binary_path": "/path/to/binary",
+    "analysis_type": "all",
+    "ai_analysis": True
+})
+
+# ELF binary analysis with readelf
+call_mcp_tool("binary_readelf_analysis", {
+    "binary_path": "/path/to/elf_binary",
+    "analysis_type": "all"
+})
+
+# Hex dump with pattern recognition
+call_mcp_tool("binary_hexdump_analysis", {
+    "binary_path": "/path/to/binary",
+    "offset": 0,
+    "length": 1024,
+    "format": "canonical"
+})
+```
+
 ---
 
-## 🎯 **8 Advanced Analysis Tools**
+## 🎯 **13 Advanced Analysis Tools** 🆕
 
+### **🏗️ Core Ghidra Integration**
 | Tool | Description | Use Case |
 |------|-------------|----------|
 | **🔬 Binary Analysis** | Comprehensive Ghidra + Multi-AI analysis | Full executable examination |
@@ -161,6 +203,19 @@ call_mcp_tool("ai_model_status", {
 | **🦠 Malware Analysis** | Behavioral and structural analysis | Threat intelligence |
 | **📡 Firmware Analysis** | IoT and embedded systems | Hardware security |
 | **🔍 Pattern Search** | Vulnerability detection | Code auditing |
+
+### **⚡ Tier 1 Binary Tools** 🆕 **v1.2.0**
+| Tool | Description | Features |
+|------|-------------|----------|
+| **📝 Strings Analysis** | Multi-encoding string extraction | AI pattern recognition, crypto detection |
+| **📋 File Information** | Comprehensive file metadata | Type detection, security assessment |
+| **🔧 Objdump Analysis** | Disassembly and symbol analysis | Cross-architecture, AI interpretation |
+| **⚙️ Readelf Analysis** | ELF binary structure analysis | Security features, dependency analysis |
+| **🔍 Hexdump Analysis** | Raw binary inspection | Pattern recognition, magic signatures |
+
+### **🤖 AI & Management**
+| Tool | Description | Use Case |
+|------|-------------|----------|
 | **🤖 Multi-Model Queries** | Expert assistance with 7 AI providers | Knowledge base |
 | **🔧 AI Model Status** | Provider management and testing | System monitoring |
 
@@ -253,6 +308,16 @@ This is **TechSquad Inc. proprietary software**. For feature requests, bug repor
 ---
 
 ## 🏷️ **Version History**
+
+### **v1.2.0** (September 2025) - **TIER 1 TOOLS UPDATE** 🆕
+- ⚡ **5 New Tier 1 Binary Tools** - strings, file, objdump, readelf, hexdump analysis
+- 📊 **JSON Output Support** - Structured data output for programmatic consumption  
+- 🚀 **Intelligent Caching** - 1-hour TTL cache system with automatic cleanup
+- 🔒 **Enhanced Security** - Advanced input validation for all new tools
+- 🤖 **AI-Powered Analysis** - Each tool includes optional AI security assessment
+- 📝 **Pattern Recognition** - Automated detection of crypto, URLs, suspicious content
+- 🎯 **Cross-Platform Tested** - Validated on Ubuntu 22.04/24.04, Kali Linux, Debian 12
+- 📦 **Docker Ready** - Complete containerized testing infrastructure
 
 ### **v1.1.0** (January 2025) - **MAJOR UPDATE** 🚀
 - 🤖 **Multi-Model AI Integration** - 7 AI providers with intelligent fallback

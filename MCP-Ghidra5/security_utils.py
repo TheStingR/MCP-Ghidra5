@@ -394,3 +394,120 @@ def validate_gpt5_query_args(args: dict) -> dict:
         validated['specialization'] = args['specialization']
     
     return validated
+
+# Tier 1 Tool Validation Functions (Phase 1 Quick Wins)
+def validate_tier1_binary_args(args: dict, tool_name: str) -> dict:
+    """Validate arguments for Tier 1 binary analysis tools"""
+    validated = {}
+    
+    # Required: binary_path
+    if 'binary_path' not in args:
+        raise SecurityError("binary_path is required")
+    
+    binary_path = PathValidator.sanitize_path(args['binary_path'])
+    if not binary_path:
+        raise SecurityError(f"Invalid binary path: {args.get('binary_path')}")
+    validated['binary_path'] = binary_path
+    
+    # Tool-specific validations
+    if tool_name == "strings":
+        # Validate min_length
+        min_length = args.get('min_length', 4)
+        if not isinstance(min_length, int) or min_length < 1 or min_length > 100:
+            raise SecurityError(f"Invalid min_length: {min_length} (must be 1-100)")
+        validated['min_length'] = min_length
+        
+        # Validate encoding
+        valid_encodings = ['ascii', 'utf-8', 'utf-16', 'all']
+        encoding = args.get('encoding', 'all')
+        if encoding not in valid_encodings:
+            raise SecurityError(f"Invalid encoding: {encoding}")
+        validated['encoding'] = encoding
+        
+    elif tool_name == "objdump":
+        # Validate analysis_type
+        valid_types = ['headers', 'disassemble', 'symbols', 'sections', 'relocs', 'dynamic', 'all']
+        analysis_type = args.get('analysis_type', 'all')
+        if analysis_type not in valid_types:
+            raise SecurityError(f"Invalid analysis_type: {analysis_type}")
+        validated['analysis_type'] = analysis_type
+        
+        # Validate architecture
+        architecture = args.get('architecture', '')
+        if architecture:
+            valid_archs = ['i386', 'x86-64', 'arm', 'aarch64', 'mips', 'powerpc', 'sparc']
+            if architecture not in valid_archs:
+                raise SecurityError(f"Invalid architecture: {architecture}")
+            validated['architecture'] = architecture
+            
+    elif tool_name == "readelf":
+        # Validate analysis_type
+        valid_types = ['headers', 'sections', 'symbols', 'relocs', 'dynamic', 'notes', 'all']
+        analysis_type = args.get('analysis_type', 'all')
+        if analysis_type not in valid_types:
+            raise SecurityError(f"Invalid analysis_type: {analysis_type}")
+        validated['analysis_type'] = analysis_type
+        
+    elif tool_name == "hexdump":
+        # Validate offset
+        offset = args.get('offset', 0)
+        if not isinstance(offset, int) or offset < 0:
+            raise SecurityError(f"Invalid offset: {offset} (must be >= 0)")
+        validated['offset'] = offset
+        
+        # Validate length
+        length = args.get('length', 512)
+        if not isinstance(length, int) or length < 1 or length > 1024 * 1024:  # Max 1MB
+            raise SecurityError(f"Invalid length: {length} (must be 1-1048576)")
+        validated['length'] = length
+        
+        # Validate format
+        valid_formats = ['canonical', 'octal', 'hex', 'decimal']
+        format_type = args.get('format', 'canonical')
+        if format_type not in valid_formats:
+            raise SecurityError(f"Invalid format: {format_type}")
+        validated['format'] = format_type
+    
+    # Common validations for all Tier 1 tools
+    # Validate output_format
+    valid_outputs = ['text', 'json']
+    output_format = args.get('output_format', 'text')
+    if output_format not in valid_outputs:
+        raise SecurityError(f"Invalid output_format: {output_format}")
+    validated['output_format'] = output_format
+    
+    # Validate ai_analysis flag
+    ai_analysis = args.get('ai_analysis', True)
+    if not isinstance(ai_analysis, bool):
+        raise SecurityError(f"Invalid ai_analysis: {ai_analysis} (must be boolean)")
+    validated['ai_analysis'] = ai_analysis
+    
+    return validated
+
+def validate_strings_analysis_args(args: dict) -> dict:
+    """Validate arguments for strings analysis"""
+    return validate_tier1_binary_args(args, "strings")
+
+def validate_file_info_args(args: dict) -> dict:
+    """Validate arguments for file info analysis"""
+    validated = validate_tier1_binary_args(args, "file")
+    
+    # Additional validation for detailed flag
+    detailed = args.get('detailed', True)
+    if not isinstance(detailed, bool):
+        raise SecurityError(f"Invalid detailed flag: {detailed} (must be boolean)")
+    validated['detailed'] = detailed
+    
+    return validated
+
+def validate_objdump_analysis_args(args: dict) -> dict:
+    """Validate arguments for objdump analysis"""
+    return validate_tier1_binary_args(args, "objdump")
+
+def validate_readelf_analysis_args(args: dict) -> dict:
+    """Validate arguments for readelf analysis"""
+    return validate_tier1_binary_args(args, "readelf")
+
+def validate_hexdump_analysis_args(args: dict) -> dict:
+    """Validate arguments for hexdump analysis"""
+    return validate_tier1_binary_args(args, "hexdump")
