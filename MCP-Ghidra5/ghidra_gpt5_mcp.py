@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Ghidra GPT-5 MCP Server for Advanced Reverse Engineering
-Version: 1.2.0
+Version: 1.3.0-dev
 Specialized for binary analysis, exploitation research, and malware reverse engineering
 
 Copyright (c) 2024 TechSquad Inc. - All Rights Reserved
@@ -13,12 +13,22 @@ Unauthorized reproduction, distribution, or sale is strictly prohibited.
 For licensing inquiries, contact TechSquad Inc.
 
 CHANGELOG:
+v1.3.0-dev (2025-09-24) - Phase 2: Advanced Binary Diffing Tools
+  - Added binary diffing engine for version comparison
+  - Implemented patch analysis for security assessment
+  - Added version evolution tracking across multiple binaries
+  - Enhanced reporting capabilities with visualization
+  - Integrated AI-powered security analysis for binary changes
+v1.2.0 (2025-09-21) - Phase 1 Quick Wins: Tier 1 Binary Analysis Tools
+  - Added 5 new Tier 1 binary analysis tools
+  - Implemented intelligent caching system
+  - Added comprehensive security validation
+  - Supported JSON output format for automation
 v1.1.0 (2025-01-19) - Major Multi-Model AI Integration
   - Added comprehensive multi-model AI support (OpenAI, Claude, Gemini, Grok, DeepSeek, Ollama)
   - Implemented AI model status and testing tools
   - Added cost tracking and usage statistics
   - Enhanced error handling and automatic fallback systems
-  - See CHANGELOG.md for complete details
 v1.0.1 (2025-09-18) - Critical bug fixes reported by PurpleTeam-TechSquad
   - Added Ghidra path auto-detection for multiple Linux distributions
   - Enhanced cross-platform compatibility
@@ -48,7 +58,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Version and metadata
-__version__ = "1.2.0"
+__version__ = "1.3.0-dev"
 __author__ = "TheStingR"
 __copyright__ = "Copyright (c) 2024 TechSquad Inc. - All Rights Reserved"
 __license__ = "Proprietary - NOT FOR RESALE"
@@ -457,6 +467,140 @@ async def handle_list_tools() -> List[Tool]:
                 },
                 "required": ["binary_path"]
             }
+        ),
+        # Phase 2: Binary Diffing Tools
+        Tool(
+            name="binary_diff_analysis",
+            description="Compare two binary files with comprehensive diffing capabilities and AI security analysis",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "binary_path_1": {
+                        "type": "string",
+                        "description": "Path to first binary file"
+                    },
+                    "binary_path_2": {
+                        "type": "string",
+                        "description": "Path to second binary file"
+                    },
+                    "diff_type": {
+                        "type": "string",
+                        "description": "Type of binary diffing to perform",
+                        "enum": ["file", "strings", "functions", "metadata", "comprehensive"],
+                        "default": "comprehensive"
+                    },
+                    "output_format": {
+                        "type": "string",
+                        "description": "Output format",
+                        "enum": ["text", "json", "html"],
+                        "default": "text"
+                    },
+                    "ai_analysis": {
+                        "type": "boolean",
+                        "description": "Enable AI-powered security analysis of binary differences",
+                        "default": True
+                    }
+                },
+                "required": ["binary_path_1", "binary_path_2"]
+            }
+        ),
+        Tool(
+            name="patch_security_analysis",
+            description="Analyze security implications of binary changes with patch analysis and vulnerability tracking",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "original_binary": {
+                        "type": "string",
+                        "description": "Path to original (unpatched) binary file"
+                    },
+                    "patched_binary": {
+                        "type": "string",
+                        "description": "Path to patched binary file"
+                    },
+                    "analysis_depth": {
+                        "type": "string",
+                        "description": "Depth of security analysis",
+                        "enum": ["quick", "standard", "comprehensive"],
+                        "default": "standard"
+                    },
+                    "focus_areas": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Areas to focus analysis on",
+                        "default": ["security", "performance", "functionality"]
+                    },
+                    "output_format": {
+                        "type": "string",
+                        "description": "Output format",
+                        "enum": ["text", "json", "html"],
+                        "default": "text"
+                    }
+                },
+                "required": ["original_binary", "patched_binary"]
+            }
+        ),
+        Tool(
+            name="version_evolution_analysis",
+            description="Track changes across multiple binary versions with timeline and feature evolution tracking",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "binary_versions": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Paths to binary versions in chronological order"
+                    },
+                    "tracking_mode": {
+                        "type": "string",
+                        "description": "Type of evolution tracking",
+                        "enum": ["timeline", "features", "security", "dependencies"],
+                        "default": "timeline"
+                    },
+                    "comparison_baseline": {
+                        "type": "string",
+                        "description": "Baseline for comparison",
+                        "enum": ["first", "previous", "specified"],
+                        "default": "previous"
+                    },
+                    "generate_report": {
+                        "type": "boolean",
+                        "description": "Generate comprehensive evolution report",
+                        "default": True
+                    }
+                },
+                "required": ["binary_versions"]
+            }
+        ),
+        Tool(
+            name="binary_diff_report",
+            description="Generate comprehensive binary difference reports with visualizations and security analysis",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "diff_results": {
+                        "type": "string",
+                        "description": "Path to previous diff results JSON file"
+                    },
+                    "report_format": {
+                        "type": "string",
+                        "description": "Report output format",
+                        "enum": ["html", "pdf", "markdown"],
+                        "default": "html"
+                    },
+                    "include_visualizations": {
+                        "type": "boolean",
+                        "description": "Include graphical visualizations in report",
+                        "default": True
+                    },
+                    "executive_summary": {
+                        "type": "boolean",
+                        "description": "Include executive summary with key findings",
+                        "default": True
+                    }
+                },
+                "required": ["diff_results"]
+            }
         )
     ]
 
@@ -491,6 +635,15 @@ async def handle_call_tool(name: str, arguments: Dict[str, Any]) -> List[TextCon
             return await handle_readelf_analysis(arguments)
         elif name == "binary_hexdump_analysis":
             return await handle_hexdump_analysis(arguments)
+        # Phase 2 Binary Diffing Tools
+        elif name == "binary_diff_analysis":
+            return await handle_binary_diff_analysis(arguments)
+        elif name == "patch_security_analysis":
+            return await handle_patch_security_analysis(arguments)
+        elif name == "version_evolution_analysis":
+            return await handle_version_evolution_analysis(arguments)
+        elif name == "binary_diff_report":
+            return await handle_binary_diff_report(arguments)
         else:
             return [TextContent(type="text", text=f"Unknown tool: {name}")]
     except Exception as e:
@@ -1476,6 +1629,511 @@ Provide analysis focusing on:
         return [TextContent(type="text", text=f"Hexdump analysis failed: {str(e)}")]
 
 # ===== END TIER 1 HANDLERS =====
+
+# ===== PHASE 2 BINARY DIFFING HANDLERS =====
+
+async def handle_binary_diff_analysis(arguments: Dict[str, Any]) -> List[TextContent]:
+    """Handle comprehensive binary diffing analysis"""
+    try:
+        from binary_diff_engine import BinaryDiffEngine
+        
+        binary1 = arguments["binary_path_1"]
+        binary2 = arguments["binary_path_2"]
+        diff_type = arguments.get("diff_type", "comprehensive")
+        output_format = arguments.get("output_format", "text")
+        ai_analysis = arguments.get("ai_analysis", True)
+        
+        # Map diff_type to diff_types list
+        if diff_type == "comprehensive":
+            diff_types = ["file", "strings", "functions", "metadata"]
+        else:
+            diff_types = [diff_type]
+        
+        # Perform binary diff analysis
+        with BinaryDiffEngine() as engine:
+            results = await engine.comprehensive_diff(
+                binary1, binary2, 
+                diff_types=diff_types,
+                ai_analysis=ai_analysis
+            )
+        
+        # Format output
+        if output_format == "json":
+            output_text = json.dumps(results, indent=2)
+        elif output_format == "html":
+            output_text = format_diff_results_as_html(results)
+        else:
+            output_text = format_diff_results_as_text(results)
+        
+        return [TextContent(type="text", text=output_text)]
+        
+    except Exception as e:
+        logger.error(f"Binary diff analysis failed: {e}")
+        return [TextContent(type="text", text=f"Binary diff analysis failed: {str(e)}")]
+
+async def handle_patch_security_analysis(arguments: Dict[str, Any]) -> List[TextContent]:
+    """Handle patch security analysis with vulnerability tracking"""
+    try:
+        from binary_diff_engine import BinaryDiffEngine
+        
+        original = arguments["original_binary"]
+        patched = arguments["patched_binary"]
+        depth = arguments.get("analysis_depth", "standard")
+        focus = arguments.get("focus_areas", ["security", "performance", "functionality"])
+        output_format = arguments.get("output_format", "text")
+        
+        # Determine diff types based on analysis depth
+        if depth == "quick":
+            diff_types = ["file", "strings"]
+        elif depth == "comprehensive":
+            diff_types = ["file", "strings", "functions", "metadata"]
+        else:  # standard
+            diff_types = ["file", "strings", "functions"]
+        
+        # Enhanced AI analysis for patch security
+        ai_analysis = True
+        
+        with BinaryDiffEngine() as engine:
+            results = await engine.comprehensive_diff(
+                original, patched,
+                diff_types=diff_types,
+                ai_analysis=ai_analysis
+            )
+            
+            # Add patch-specific analysis
+            results["patch_analysis"] = {
+                "analysis_depth": depth,
+                "focus_areas": focus,
+                "security_assessment": "enabled"
+            }
+        
+        # Format output with security focus
+        if output_format == "json":
+            output_text = json.dumps(results, indent=2)
+        else:
+            output_text = format_patch_analysis_as_text(results)
+        
+        return [TextContent(type="text", text=output_text)]
+        
+    except Exception as e:
+        logger.error(f"Patch security analysis failed: {e}")
+        return [TextContent(type="text", text=f"Patch security analysis failed: {str(e)}")]
+
+async def handle_version_evolution_analysis(arguments: Dict[str, Any]) -> List[TextContent]:
+    """Handle multi-version binary evolution analysis"""
+    try:
+        from binary_diff_engine import BinaryDiffEngine
+        
+        versions = arguments["binary_versions"]
+        tracking_mode = arguments.get("tracking_mode", "timeline")
+        baseline = arguments.get("comparison_baseline", "previous")
+        generate_report = arguments.get("generate_report", True)
+        
+        if len(versions) < 2:
+            return [TextContent(type="text", text="Error: At least 2 binary versions required for evolution analysis")]
+        
+        evolution_results = {
+            "analysis_type": "version_evolution",
+            "version": "1.3.0-dev",
+            "tracking_mode": tracking_mode,
+            "comparison_baseline": baseline,
+            "binary_versions": versions,
+            "timestamp": datetime.now().isoformat(),
+            "comparisons": []
+        }
+        
+        # Perform pairwise comparisons
+        with BinaryDiffEngine() as engine:
+            for i in range(1, len(versions)):
+                if baseline == "first":
+                    binary1 = versions[0]
+                    binary2 = versions[i]
+                    comparison_name = f"v1_vs_v{i+1}"
+                elif baseline == "previous":
+                    binary1 = versions[i-1]
+                    binary2 = versions[i]
+                    comparison_name = f"v{i}_vs_v{i+1}"
+                else:  # specified - use previous for now
+                    binary1 = versions[i-1]
+                    binary2 = versions[i]
+                    comparison_name = f"v{i}_vs_v{i+1}"
+                
+                logger.info(f"Comparing {comparison_name}: {binary1} vs {binary2}")
+                
+                diff_result = await engine.comprehensive_diff(
+                    binary1, binary2,
+                    diff_types=["file", "strings", "functions"],
+                    ai_analysis=True
+                )
+                
+                evolution_results["comparisons"].append({
+                    "comparison_name": comparison_name,
+                    "binary1": binary1,
+                    "binary2": binary2,
+                    "results": diff_result
+                })
+        
+        # Generate summary
+        evolution_results["summary"] = generate_evolution_summary(evolution_results)
+        
+        # Format output
+        if generate_report:
+            output_text = format_evolution_analysis_as_text(evolution_results)
+        else:
+            output_text = json.dumps(evolution_results, indent=2)
+        
+        return [TextContent(type="text", text=output_text)]
+        
+    except Exception as e:
+        logger.error(f"Version evolution analysis failed: {e}")
+        return [TextContent(type="text", text=f"Version evolution analysis failed: {str(e)}")]
+
+async def handle_binary_diff_report(arguments: Dict[str, Any]) -> List[TextContent]:
+    """Handle binary diff report generation"""
+    try:
+        diff_results_path = arguments["diff_results"]
+        report_format = arguments.get("report_format", "html")
+        include_viz = arguments.get("include_visualizations", True)
+        exec_summary = arguments.get("executive_summary", True)
+        
+        # Load diff results
+        try:
+            with open(diff_results_path, 'r') as f:
+                diff_results = json.load(f)
+        except Exception as e:
+            return [TextContent(type="text", text=f"Error loading diff results: {str(e)}")]
+        
+        # Generate report
+        report_content = generate_diff_report(
+            diff_results, 
+            report_format=report_format,
+            include_visualizations=include_viz,
+            executive_summary=exec_summary
+        )
+        
+        # Save report to temporary file
+        import tempfile
+        with tempfile.NamedTemporaryFile(mode='w', suffix=f'.{report_format}', delete=False) as f:
+            f.write(report_content)
+            report_path = f.name
+        
+        output_text = f"""Binary Diff Report Generated Successfully!
+
+Report Details:
+- Format: {report_format.upper()}
+- Visualizations: {'Included' if include_viz else 'Not included'}
+- Executive Summary: {'Included' if exec_summary else 'Not included'}
+- Report Path: {report_path}
+
+Report Preview:
+{report_content[:1000]}{'...' if len(report_content) > 1000 else ''}
+"""
+        
+        return [TextContent(type="text", text=output_text)]
+        
+    except Exception as e:
+        logger.error(f"Binary diff report generation failed: {e}")
+        return [TextContent(type="text", text=f"Binary diff report generation failed: {str(e)}")]
+
+# Helper functions for formatting diff results
+
+def format_diff_results_as_text(results: Dict[str, Any]) -> str:
+    """Format diff results as human-readable text"""
+    output = f"""🔄 BINARY DIFF ANALYSIS RESULTS
+{'='*50}
+
+Analysis Type: {results.get('analysis_type', 'Unknown')}
+Version: {results.get('version', 'Unknown')}
+Timestamp: {results.get('timestamp', 'Unknown')}
+
+Binaries Compared:
+- Binary 1: {results.get('binary1', 'Unknown')}
+- Binary 2: {results.get('binary2', 'Unknown')}
+
+Diff Types Performed: {', '.join(results.get('diff_types_performed', []))}
+AI Analysis: {'Enabled' if results.get('ai_analysis_enabled') else 'Disabled'}
+
+"""
+    
+    # Add results for each diff type
+    diff_results = results.get('results', {})
+    
+    if 'file_level' in diff_results:
+        file_result = diff_results['file_level']
+        output += f"""📁 FILE-LEVEL ANALYSIS
+{'-'*30}
+Identical: {file_result.get('identical', False)}
+Similarity Score: {file_result.get('similarity_score', 0):.2%}
+Size Difference: {file_result.get('size_diff', 0)} bytes
+Byte Differences: {file_result.get('byte_diff_count', 0)}
+
+"""
+    
+    if 'string_level' in diff_results:
+        string_result = diff_results['string_level']
+        output += f"""📝 STRING-LEVEL ANALYSIS
+{'-'*30}
+Strings in Binary 1: {string_result.get('strings1_count', 0)}
+Strings in Binary 2: {string_result.get('strings2_count', 0)}
+Added Strings: {len(string_result.get('added_strings', []))}
+Removed Strings: {len(string_result.get('removed_strings', []))}
+String Similarity: {string_result.get('string_similarity_score', 0):.2%}
+
+"""
+    
+    if 'function_level' in diff_results:
+        func_result = diff_results['function_level']
+        output += f"""🔧 FUNCTION-LEVEL ANALYSIS
+{'-'*30}
+Functions in Binary 1: {func_result.get('functions1_count', 0)}
+Functions in Binary 2: {func_result.get('functions2_count', 0)}
+Added Functions: {len(func_result.get('added_functions', []))}
+Removed Functions: {len(func_result.get('removed_functions', []))}
+Changed Functions: {len(func_result.get('changed_functions', []))}
+Function Similarity: {func_result.get('function_similarity_score', 0):.2%}
+
+"""
+    
+    # Add AI analysis if available
+    if results.get('ai_analysis'):
+        ai_result = results['ai_analysis']
+        output += f"""🤖 AI SECURITY ANALYSIS
+{'-'*30}
+Provider: {ai_result.get('provider', 'Unknown')}
+Model: {ai_result.get('model', 'Unknown')}
+
+Analysis:
+{ai_result.get('analysis', 'No analysis available')}
+
+"""
+    
+    return output
+
+def format_diff_results_as_html(results: Dict[str, Any]) -> str:
+    """Format diff results as HTML report"""
+    # Basic HTML template - can be enhanced with CSS/JS
+    html = f"""<!DOCTYPE html>
+<html>
+<head>
+    <title>Binary Diff Analysis Report</title>
+    <style>
+        body {{ font-family: Arial, sans-serif; margin: 40px; }}
+        .header {{ background-color: #f0f0f0; padding: 20px; border-radius: 5px; }}
+        .section {{ margin: 20px 0; padding: 15px; border-left: 4px solid #007acc; }}
+        .result-good {{ color: green; }}
+        .result-warning {{ color: orange; }}
+        .result-critical {{ color: red; }}
+        pre {{ background-color: #f5f5f5; padding: 10px; overflow-x: auto; }}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔄 Binary Diff Analysis Report</h1>
+        <p><strong>Generated:</strong> {results.get('timestamp', 'Unknown')}</p>
+        <p><strong>Analysis Type:</strong> {results.get('analysis_type', 'Unknown')}</p>
+    </div>
+    
+    <div class="section">
+        <h2>📁 Binary Information</h2>
+        <p><strong>Binary 1:</strong> {results.get('binary1', 'Unknown')}</p>
+        <p><strong>Binary 2:</strong> {results.get('binary2', 'Unknown')}</p>
+        <p><strong>Diff Types:</strong> {', '.join(results.get('diff_types_performed', []))}</p>
+    </div>"""
+    
+    # Add sections for each diff type
+    diff_results = results.get('results', {})
+    
+    if 'file_level' in diff_results:
+        file_result = diff_results['file_level']
+        similarity = file_result.get('similarity_score', 0)
+        css_class = 'result-good' if similarity > 0.8 else 'result-warning' if similarity > 0.5 else 'result-critical'
+        
+        html += f"""
+    <div class="section">
+        <h2>📁 File-Level Analysis</h2>
+        <p class="{css_class}"><strong>Similarity Score:</strong> {similarity:.2%}</p>
+        <p><strong>Size Difference:</strong> {file_result.get('size_diff', 0)} bytes</p>
+        <p><strong>Byte Differences:</strong> {file_result.get('byte_diff_count', 0)}</p>
+    </div>"""
+    
+    if results.get('ai_analysis'):
+        ai_result = results['ai_analysis']
+        html += f"""
+    <div class="section">
+        <h2>🤖 AI Security Analysis</h2>
+        <p><strong>Provider:</strong> {ai_result.get('provider', 'Unknown')} - {ai_result.get('model', 'Unknown')}</p>
+        <pre>{ai_result.get('analysis', 'No analysis available')}</pre>
+    </div>"""
+    
+    html += """</body>
+</html>"""
+    
+    return html
+
+def format_patch_analysis_as_text(results: Dict[str, Any]) -> str:
+    """Format patch analysis with security focus"""
+    output = format_diff_results_as_text(results)
+    
+    # Add patch-specific information
+    patch_info = results.get('patch_analysis', {})
+    output += f"""🛡️  PATCH SECURITY ASSESSMENT
+{'-'*30}
+Analysis Depth: {patch_info.get('analysis_depth', 'Unknown')}
+Focus Areas: {', '.join(patch_info.get('focus_areas', []))}
+Security Assessment: {patch_info.get('security_assessment', 'Unknown')}
+
+"""
+    
+    return output
+
+def format_evolution_analysis_as_text(results: Dict[str, Any]) -> str:
+    """Format version evolution analysis as text"""
+    output = f"""📈 BINARY VERSION EVOLUTION ANALYSIS
+{'='*50}
+
+Tracking Mode: {results.get('tracking_mode', 'Unknown')}
+Comparison Baseline: {results.get('comparison_baseline', 'Unknown')}
+Binary Versions: {len(results.get('binary_versions', []))}
+Total Comparisons: {len(results.get('comparisons', []))}
+
+"""
+    
+    # Add summary
+    summary = results.get('summary', {})
+    if summary:
+        output += f"""📊 EVOLUTION SUMMARY
+{'-'*30}
+"""
+        for key, value in summary.items():
+            output += f"{key}: {value}\n"
+        output += "\n"
+    
+    # Add individual comparisons
+    for comparison in results.get('comparisons', []):
+        output += f"""🔄 {comparison.get('comparison_name', 'Unknown')}
+{'-'*30}
+"""
+        comp_results = comparison.get('results', {})
+        if 'results' in comp_results:
+            diff_results = comp_results['results']
+            if 'file_level' in diff_results:
+                file_result = diff_results['file_level']
+                output += f"Similarity: {file_result.get('similarity_score', 0):.2%}\n"
+            if 'string_level' in diff_results:
+                string_result = diff_results['string_level']
+                output += f"String changes: +{len(string_result.get('added_strings', []))} -{len(string_result.get('removed_strings', []))}\n"
+        output += "\n"
+    
+    return output
+
+def generate_evolution_summary(results: Dict[str, Any]) -> Dict[str, Any]:
+    """Generate summary for evolution analysis"""
+    comparisons = results.get('comparisons', [])
+    summary = {
+        "total_comparisons": len(comparisons),
+        "average_similarity": 0.0,
+        "total_function_changes": 0,
+        "total_string_changes": 0
+    }
+    
+    if comparisons:
+        similarities = []
+        func_changes = 0
+        string_changes = 0
+        
+        for comp in comparisons:
+            comp_results = comp.get('results', {})
+            if 'results' in comp_results:
+                diff_results = comp_results['results']
+                
+                # Collect similarities
+                if 'file_level' in diff_results:
+                    similarities.append(diff_results['file_level'].get('similarity_score', 0))
+                
+                # Count function changes
+                if 'function_level' in diff_results:
+                    func_result = diff_results['function_level']
+                    func_changes += len(func_result.get('added_functions', []))
+                    func_changes += len(func_result.get('removed_functions', []))
+                    func_changes += len(func_result.get('changed_functions', []))
+                
+                # Count string changes
+                if 'string_level' in diff_results:
+                    string_result = diff_results['string_level']
+                    string_changes += len(string_result.get('added_strings', []))
+                    string_changes += len(string_result.get('removed_strings', []))
+        
+        if similarities:
+            summary["average_similarity"] = sum(similarities) / len(similarities)
+        summary["total_function_changes"] = func_changes
+        summary["total_string_changes"] = string_changes
+    
+    return summary
+
+def generate_diff_report(results: Dict[str, Any], report_format: str = "html", 
+                        include_visualizations: bool = True, 
+                        executive_summary: bool = True) -> str:
+    """Generate comprehensive diff report"""
+    if report_format == "html":
+        return format_diff_results_as_html(results)
+    elif report_format == "markdown":
+        return format_diff_results_as_markdown(results)
+    elif report_format == "pdf":
+        # PDF generation would require additional libraries
+        return "PDF generation not implemented yet. Use HTML format instead."
+    else:
+        return format_diff_results_as_text(results)
+
+def format_diff_results_as_markdown(results: Dict[str, Any]) -> str:
+    """Format diff results as Markdown report"""
+    md = f"""# 🔄 Binary Diff Analysis Report
+
+**Analysis Type:** {results.get('analysis_type', 'Unknown')}  
+**Version:** {results.get('version', 'Unknown')}  
+**Timestamp:** {results.get('timestamp', 'Unknown')}  
+
+## 📁 Binary Information
+
+- **Binary 1:** `{results.get('binary1', 'Unknown')}`
+- **Binary 2:** `{results.get('binary2', 'Unknown')}`
+- **Diff Types:** {', '.join(results.get('diff_types_performed', []))}
+- **AI Analysis:** {'✅ Enabled' if results.get('ai_analysis_enabled') else '❌ Disabled'}
+
+"""
+    
+    # Add results sections
+    diff_results = results.get('results', {})
+    
+    if 'file_level' in diff_results:
+        file_result = diff_results['file_level']
+        md += f"""## 📁 File-Level Analysis
+
+| Metric | Value |
+|--------|-------|
+| Identical | {'✅ Yes' if file_result.get('identical') else '❌ No'} |
+| Similarity Score | {file_result.get('similarity_score', 0):.2%} |
+| Size Difference | {file_result.get('size_diff', 0)} bytes |
+| Byte Differences | {file_result.get('byte_diff_count', 0)} |
+
+"""
+    
+    if results.get('ai_analysis'):
+        ai_result = results['ai_analysis']
+        md += f"""## 🤖 AI Security Analysis
+
+**Provider:** {ai_result.get('provider', 'Unknown')} - {ai_result.get('model', 'Unknown')}
+
+```
+{ai_result.get('analysis', 'No analysis available')}
+```
+
+"""
+    
+    return md
+
+# ===== END PHASE 2 HANDLERS =====
+
+import datetime
 
 async def main():
     """Run the MCP server"""

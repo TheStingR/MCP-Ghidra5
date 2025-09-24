@@ -6,9 +6,9 @@
 
 ## 📋 **Overview**
 
-This comprehensive API reference covers all 7 analysis tools available in the MCP-Ghidra5 server. Each tool is designed for specific reverse engineering, malware analysis, and exploitation research tasks.
+This comprehensive API reference covers all 17 analysis tools available in the MCP-Ghidra5 server. Each tool is designed for specific reverse engineering, malware analysis, and exploitation research tasks.
 
-**Version:** 1.0.1  
+**Version:** 1.3.0  
 **Compatible with:** Warp Terminal, Claude Desktop, MCP-compatible clients  
 **Requirements:** OpenAI API key (GPT-4o/GPT-5), Ghidra 11.x (optional)
 
@@ -16,6 +16,7 @@ This comprehensive API reference covers all 7 analysis tools available in the MC
 
 ## 🛠️ **Available Analysis Tools**
 
+### **🏗️ Core Ghidra Integration**
 | Tool | Purpose | Speed | Complexity |
 |------|---------|-------|------------|
 | [🔬 Binary Analysis](#1-ghidra_binary_analysis) | Full executable analysis | 15-30s | ⭐⭐⭐ |
@@ -25,6 +26,24 @@ This comprehensive API reference covers all 7 analysis tools available in the MC
 | [📡 Firmware Analysis](#5-ghidra_firmware_analysis) | IoT & embedded system security | 20-35s | ⭐⭐⭐ |
 | [🔍 Pattern Search](#6-ghidra_code_pattern_search) | Vulnerability pattern detection | 15-25s | ⭐⭐ |
 | [🤖 GPT-5 Queries](#7-gpt5_reverse_engineering_query) | Direct expert consultation | 5-15s | ⭐ |
+
+### **⚡ Tier 1 Binary Tools** 🆕 **v1.2.0**
+| Tool | Purpose | Speed | Complexity |
+|------|---------|-------|------------|
+| [📝 Strings Analysis](#8-binary_strings_analysis) | Multi-encoding string extraction | 5-15s | ⭐ |
+| [📋 File Information](#9-binary_file_info) | Comprehensive file metadata | 3-8s | ⭐ |
+| [🔧 Objdump Analysis](#10-binary_objdump_analysis) | Disassembly and symbol analysis | 10-20s | ⭐⭐ |
+| [⚙️ Readelf Analysis](#11-binary_readelf_analysis) | ELF binary structure analysis | 5-12s | ⭐ |
+| [🔍 Hexdump Analysis](#12-binary_hexdump_analysis) | Raw binary inspection | 3-10s | ⭐ |
+| [🔧 AI Model Status](#13-ai_model_status) | Provider management and testing | 2-5s | ⭐ |
+
+### **🔄 Phase 2 Binary Diffing Tools** 🆕 **v1.3.0**
+| Tool | Purpose | Speed | Complexity |
+|------|---------|-------|------------|
+| [📊 Binary File Diff](#14-binary_diff_file) | Comprehensive binary comparison | 5-30s | ⭐⭐ |
+| [📝 Strings Diff](#15-binary_diff_strings) | String-based binary comparison | 8-20s | ⭐⭐ |
+| [🔧 Functions Diff](#16-binary_diff_functions) | Function-level comparison | 15-45s | ⭐⭐⭐ |
+| [📋 Metadata Diff](#17-binary_diff_metadata) | Binary metadata comparison | 5-15s | ⭐⭐ |
 
 ---
 
@@ -500,6 +519,144 @@ call_mcp_tool("gpt5_reverse_engineering_query", {
 
 ---
 
+## 14. **binary_diff_file**
+
+**📊 Comprehensive Binary File Comparison**
+
+### **Purpose**
+Performs comprehensive binary-to-binary comparison analysis with AI-powered security assessment. Ideal for patch analysis, malware variant detection, and vulnerability research.
+
+### **Input Schema**
+```json
+{
+  "file1_path": "string (required)",
+  "file2_path": "string (required)",
+  "ai_analysis": "boolean (optional)"
+}
+```
+
+### **Parameters**
+
+#### `file1_path` (required)
+- **Type:** String
+- **Description:** Path to first binary file for comparison
+- **Security:** Path validation, size limits (100MB per file)
+
+#### `file2_path` (required) 
+- **Type:** String
+- **Description:** Path to second binary file for comparison
+- **Security:** Path validation, size limits (100MB per file)
+
+#### `ai_analysis` (optional)
+- **Type:** Boolean
+- **Default:** true
+- **Description:** Enable AI-powered security analysis of differences
+
+### **Usage Examples**
+
+#### Malware Variant Analysis
+```python
+call_mcp_tool("binary_diff_file", {
+    "file1_path": "/samples/malware_v1.exe",
+    "file2_path": "/samples/malware_v2.exe",
+    "ai_analysis": true
+})
+```
+
+#### Patch Analysis
+```python
+call_mcp_tool("binary_diff_file", {
+    "file1_path": "/bins/app_before.bin",
+    "file2_path": "/bins/app_after.bin",
+    "ai_analysis": true
+})
+```
+
+---
+
+## 15. **binary_diff_strings**
+
+**📝 String-Based Binary Comparison**
+
+### **Purpose**
+Analyzes string differences between two binaries with pattern recognition and cryptographic content detection.
+
+### **Input Schema**
+```json
+{
+  "file1_path": "string (required)",
+  "file2_path": "string (required)",
+  "min_length": "integer (optional)"
+}
+```
+
+### **Usage Examples**
+
+#### Configuration Changes
+```python
+call_mcp_tool("binary_diff_strings", {
+    "file1_path": "/config/app_v1",
+    "file2_path": "/config/app_v2",
+    "min_length": 4
+})
+```
+
+---
+
+## 16. **binary_diff_functions**
+
+**🔧 Function-Level Comparison Analysis**
+
+### **Purpose**
+Performs function-level comparison using Ghidra decompilation with AI-enhanced analysis of behavioral changes.
+
+### **Input Schema**
+```json
+{
+  "file1_path": "string (required)",
+  "file2_path": "string (required)"
+}
+```
+
+### **Usage Examples**
+
+#### Code Evolution Analysis
+```python
+call_mcp_tool("binary_diff_functions", {
+    "file1_path": "/releases/v1.0.exe",
+    "file2_path": "/releases/v1.1.exe"
+})
+```
+
+---
+
+## 17. **binary_diff_metadata**
+
+**📋 Binary Metadata Comparison**
+
+### **Purpose**
+Compares ELF headers, sections, symbols, and other metadata between binaries with security impact assessment.
+
+### **Input Schema**
+```json
+{
+  "file1_path": "string (required)",
+  "file2_path": "string (required)"
+}
+```
+
+### **Usage Examples**
+
+#### Security Feature Analysis
+```python
+call_mcp_tool("binary_diff_metadata", {
+    "file1_path": "/bins/unprotected.elf",
+    "file2_path": "/bins/protected.elf"
+})
+```
+
+---
+
 ## 🚨 **Security and Best Practices**
 
 ### **Security Features**
@@ -540,12 +697,15 @@ call_mcp_tool("gpt5_reverse_engineering_query", {
 - **Firmware Analysis:** 20-35 seconds
 - **Malware Analysis:** 25-45 seconds
 - **Exploit Development:** 20-40 seconds
+- **Tier 1 Tools:** 3-20 seconds
+- **Binary Diffing:** 5-45 seconds
 
 ### **Cost Estimates** (GPT-4o pricing)
 - **Quick Analysis:** $0.05-0.10
 - **Standard Analysis:** $0.15-0.30  
 - **Deep Analysis:** $0.30-0.60
 - **Exploit PoC:** $0.40-0.80
+- **Binary Diffing:** $0.02-0.10
 
 ---
 

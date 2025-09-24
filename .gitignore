@@ -1,6 +1,12 @@
 # TechSquad Inc. - MCP-Ghidra5 Project
 # Copyright (c) 2024 TechSquad Inc. - All Rights Reserved
 
+# 🚨 CRITICAL - NEVER UPLOAD PRIVATE FOLDER
+private/
+project/
+Project/
+PRIVATE/
+
 # Sensitive configuration files
 *api_key*
 *.key
@@ -60,7 +66,7 @@ internal/
 proprietary/
 classified/
 
-# Private documentation and notes (DO NOT COMMIT)
+# 🚨 CRITICAL SECURITY - Private documentation and notes (DO NOT COMMIT)
 *_SUMMARY.md
 *_ANALYSIS.md
 *_REPORT.md
@@ -74,3 +80,55 @@ CURRENT_*.md
 RESTORE_CHECKPOINT.md
 prepare_release_v1.1.0.sh
 MCP_GHIDRA5_EXPANSION_ROADMAP.md
+
+# 🚨 OPSEC PROTECTION - NEVER UPLOAD THESE FILES
+*RESTORE*
+*restore*
+*QUICK_RESUME*
+*resume*
+*CHECKPOINT*
+*checkpoint*
+*.restore
+*.resume
+restore_*
+checkpoint_*
+
+# 🚨 SYSTEM PATHS & PRIVATE DIRECTORIES
+**/home/kali-admin/**
+**/mnt/storage/**
+**/opt/**
+**/usr/share/**
+**system_paths**
+**private_paths**
+**/ctf-work/**
+**/TRAINING/**
+**/HTB/**
+**/WARP-Projects/**
+**/telegram_collector/**
+
+# 🚨 DEVELOPMENT DRAFTS
+*_DRAFT*
+*_draft*
+*_WIP*
+*_wip*
+NOTES_*
+notes_*
+DRAFT_*
+WIP_*
+
+# 🚨 PRIVATE CONFIGURATION & SCRIPTS
+*terminal_config.json
+*_config.json
+create_*_package.sh
+package_*.sh
+
+# 🚨 TEST LOGS & OUTPUTS  
+test-logs/
+*.test.log
+docker-tests/test-logs/
+
+# 🚨 NEVER UPLOAD - SYSTEM REFERENCES
+# Any file containing system paths
+**/kali-admin/**
+**/mnt/**
+**/opt/**
